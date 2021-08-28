@@ -1,7 +1,14 @@
+note_some_markdown = Some typographic markdown is allowed.
+note_most_markdown = Most markdown constructs are allowed (typography, lists, links etc).
+note_no_markdown = 
+
+note_editable = You will be able to change this before publishing.
+
+
 f_title = RustFest Global 2021 CFP
 
-f_submission_deadline_t = Submission deadline
 
+f_submission_deadline_t = Submission deadline
 f_submission_deadline =
   Note, the RustFest Global CFP has **no deadline**, the CFP *does not close*,
   but for your talk to be considered for one of our upcoming events,
@@ -9,15 +16,11 @@ f_submission_deadline =
   
   {"["}See this link for cut-off dates for CFP submissions for upcoming events](https://rustfest.global/cfp#upcoming-events)
 
+
 f_submission_t = Submission
 
+
 f_submission_lang_t = Select the language for your submission
-
-# input_id: `submission_language`
-# input_data: - English
-#  - Español (Spanish)
-#  - 日本語で (Japanese)
-
 f_submission_lang =
   Select the language you will be writing your submission in.
   
@@ -32,10 +35,6 @@ f_submission_lang =
 
 
 f_submission_presentation_lang_t = Presentation language
-
-# input_id: `presentation_language`
-# input_data:
-
 f_submission_presentation_lang =
   If you plan to present in { $submission_language_name } you can leave this field unmodified.
   
@@ -46,7 +45,81 @@ f_submission_presentation_lang =
   reach a wide audience.
   For this reason we are always happy to host talks in a wide variety of languages,
   provided that we are able to sufficiently support them (i.e. in the form of subtitling).
-  Feel free to offer multiple languages here (noting the order of your preference),
+  
+  Feel free to propose multiple languages here (noting the order of your preference),
   and if accepted we will reach out to discuss the details.
   
   {"["}➡ Learn more about RustFest Global’s language support](https://rustfest.global/cfp#language)
+
+
+f_presentation_format_standard = standard talk
+f_presentation_format_longform = longform talk
+f_presentation_format_other = other
+
+f_submission_presentation_format_t = Presentation format
+
+f_submission_presentation_format_standard_t = {f_presentation_format_standard} (up to 25 min)
+f_submission_presentation_format_longform_t = {f_presentation_format_longform} (up to 50 min)
+f_submission_presentation_format_other_t = {f_presentation_format_other} (please explain in the “notes” section)
+
+f_submission_presentation_format =
+  We are primarily looking for talks, but if you have an idea for a
+  non-talk contribution, feel free to share and if you convinced us
+  we will be in touch to talk through the details.
+  
+  We are accepting standard (up to 25-minute) talks, as well as more in-depth
+  “longform” talks for topics that require more time to expose — in this latter case
+  make sure you touch on why your proposed talk requires more time in the proposal
+  or the “notes” section.
+
+
+f_proposal_t = The Proposal
+
+
+f_proposal_title_t = Title
+
+
+f_proposal_summary_t = Summary
+f_proposal_summary =
+  A short description or summary of your session.
+  You have up to 240 characters to pitch your proposed session,
+  both for the CFP committee and the conference audience.
+  
+  The {f_proposal_title_t} & {f_proposal_summary_t} are the first things
+  seen by the program selection committee, and will also be displayed
+  in the event schedule listings and social media, so these are the
+  most important venues for you to leave an impression both for talk selection
+  and, once your proposal is accepted, for the conference attendees as well.
+  
+  _{note_some_markdown}_  
+  _{note_editable}_
+
+
+f_proposal_description_t = Description
+f_proposal_description =
+  A longer, more detailed description of the proposed session.
+  
+  For more information on how to structure your proposal, read our published
+  {"["}CFP Guidelines](https://rustfest.global/cfp/#guidelines).
+  
+  _{note_most_markdown}_  
+  _{note_editable}_
+
+
+f_proposal_audience_t = Audience
+f_proposal_audience =
+  What kind of audience does your session target?  
+  Who will get the most out of your presentation?  
+  Please choose an audience type that fits your proposal the best.
+
+f_proposal_audience_beginner-friendly_t = **Introductory** -- beginner-friendly technical talks, some programming experience is recommended
+f_proposal_audience_some-rust_t = **Basic Rust** -- some baseline knowledge of Rust or systems programming is recommended
+f_proposal_audience_advanced-rust_t = **Advanced Rust** -- a solid knowledge of Rust and/or systems programming is recommended
+f_proposal_audience_all-audiences_t = **Everyone** -- no programming experience required, a talk for all audiences 
+
+
+f_proposal_notes_t = Notes to the organizers
+f_proposal_notes =
+  Here you may leave notes or remarks for the organizers and the selection committee.
+  
+  _{note_most_markdown}_

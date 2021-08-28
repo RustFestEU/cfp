@@ -1,0 +1,18 @@
+{
+  "locales": [
+    { "lang": "en", "name": "English" },
+    { "lang": "es", "name": "Español (Spanish)" },
+    { "lang": "ja", "name": "日本語で (Japanese)" }
+  ],
+  "presentation_formats": [
+    "standard",
+    "longform",
+    "other"
+  ],
+  "audience_targets": [
+    "all-audiences",
+    "beginner-friendly",
+    "some-rust",
+    "advanced-rust"
+  ]
+}

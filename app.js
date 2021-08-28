@@ -11,7 +11,8 @@ const app = createApp({
 (async function run() {
   const localeBundles = {}
 
-  let locales = await fetch(`./locales/locales.json`).then(r => r.json())
+  let configuration = await fetch(`./config.json`).then(r => r.json())
+  const { locales } = configuration;
 
   // Fetch & create all locale bundles
   for (loc of locales) {
@@ -29,7 +30,6 @@ const app = createApp({
   const fluent = createFluentVue({
     bundles: localeBundles[locales[0].lang]
   })
-  console.log(localeBundles)
 
   app.use(fluent)
 
@@ -40,8 +40,20 @@ const app = createApp({
     data() {
       return ({
         md: marked,
+        locales,
+        presentation_formats: configuration.presentation_formats,
+        audience_targets: configuration.audience_targets,
+
+        // Form data
         submission_language: locales[0].lang,
-        locales
+        submission_presentation_lang: '',
+        presentation_format: configuration.presentation_formats[0],
+        title: '',
+        summary: '',
+        description: '',
+        audience_target: configuration.audience_targets[0],
+        proposal_notes: '',
+        
       })
     },
     computed: {
@@ -51,6 +63,12 @@ const app = createApp({
       }
     },
     methods: {
+      $mt(...args) {
+        return marked(fluent.format(...args));
+      },
+      $mti(...args) {
+        return marked.parseInline(fluent.format(...args), { smartypants: true });
+      },
       localeChange(event) {
         fluent.bundles = localeBundles[this.submission_language]
       }
