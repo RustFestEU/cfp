@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Getting Started</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/vue-i18n@9"></script>
+    <script src="https://unpkg.com/marked@0.3.6"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>{{t('message.t1')}}</h1>
+
+      <h2>{{t('message.t2')}}</h2>
+      <div v-html="md(t('message.t2body'))"></div>
+    
+      <h2>{{t('message.t3')}}</h2>
+      <h3>{{t('message.t4')}}</h3>
+      
+      <form>
+        <label for="locale-select">...</label>
+        <select id="locale-select" name="submission_language" v-model="locale">
+          <option value="en">English</option>
+          <option value="es">Español (Spanish)</option>
+          <option value="ja">日本語で (Japanese)</option>
+        </select>
+      </form>
+
+      <div v-html="t('message.t4body')"></div>
+
+    </div>    
+
+    <script>
+      const { createApp } = Vue
+      const { createI18n, useI18n } = VueI18n
+
+      const i18n = createI18n({
+        legacy: false,
+        locale: 'en',
+        messages: {
+          en: {
+            message: {
+              t1: `RustFest Global 2021 CFP`,
+              t2: `Submission deadline`,
+              t2body: `Note, the RustFest Global CFP has **no deadline**. The CFP *does not close*, but for your talk to be considered for one of our upcoming events, your submission should generally arrive 3-4 weeks before the event date.\n\n[See this link for cut-off dates for CFP submissions for upcoming events](https://rustfest.global/cfp#upcoming-events)`,
+              t3: `Submission`,
+              t4: `Select the language for your submission`,
+              t4body: `Select the language you will be writing your submission in.`
+            }
+          },
+          es: {
+            message: {
+              t1: `Convocatoria de Propuestas RustFest Global 2021`,
+            }
+          },
+          ja: {
+            message: {
+              t1: `RustFest Global 2021 訳者注`,
+            }
+          }
+        }
+      })
+
+      const app = createApp({
+        setup() {
+          // `useI18n` return the global composer that is created at `createI18n`
+          // `useI18n` must to be called at head of `setup` function
+          const { t, locale } = useI18n()
+
+          // Something to do ...
+          //
+
+          return { t, locale, md: marked }
+        }
+      })
+      app.use(i18n)
+      app.mount('#app')
+    </script>
+  </body>
+</html>
