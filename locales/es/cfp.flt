@@ -1,17 +1,17 @@
-f_title = RustFest Global 2021 CFP
+f_title = Convocatoria de Propuestas RustFest Global 2021
 
-f_submission_deadline_t = Submission deadline
+f_submission_deadline_t = Fecha límite de envío
 
 f_submission_deadline =
-  Note, the RustFest Global CFP has **no deadline**, the CFP *does not close*,
+  `TODO:` Note, the RustFest Global CFP has **no deadline**, the CFP *does not close*,
   but for your talk to be considered for one of our upcoming events,
   your submission should generally arrive 3-4 weeks before the event date.
   
   {"["}See this link for cut-off dates for CFP submissions for upcoming events](https://rustfest.global/cfp#upcoming-events)
 
-f_submission_t = Submission
+f_submission_t = TODO: Submission
 
-f_submission_lang_t = Select the language for your submission
+f_submission_lang_t = TODO: Select the language for your submission
 
 # input_id: `submission_language`
 # input_data: - English
@@ -19,7 +19,7 @@ f_submission_lang_t = Select the language for your submission
 #  - 日本語で (Japanese)
 
 f_submission_lang =
-  Select the language you will be writing your submission in.
+  `TODO:` Select the language you will be writing your submission in.
   
   Changing the language above changes the language of the instructions on this page.
   We accept submissions in the provided languages and
@@ -31,13 +31,13 @@ f_submission_lang =
   {"["}➡ Learn more about RustFest Global’s language support](https://rustfest.global/cfp#language)
 
 
-f_submission_presentation_lang_t = Presentation language
+f_submission_presentation_lang_t = TODO: Presentation language
 
 # input_id: `presentation_language`
 # input_data:
 
 f_submission_presentation_lang =
-  If you plan to present in { $submission_language_name } you can leave this field unmodified.
+  `TODO:` If you plan to present in { $submission_language_name } you can leave this field unmodified.
   
   If you would like to present in any other language than your submission,
   even if it’s not listed above you may let us know here.

@@ -8,49 +8,11 @@
     <script src="https://unpkg.com/vue-demi"></script>
     <script src="https://unpkg.com/fluent-vue@3.0.0-beta.16/dist/fluent-vue.global.js"></script>
     <script src="https://unpkg.com/marked@0.3.6"></script>
+    <script async src="./app.js"></script>
   </head>
   <body>
     <div id="app">
       <main-content></main>
     </div>
-
-    <script>
-      const { createApp } = Vue;
-      const { FluentBundle, FluentResource } = window.FluentBundle;
-      const { createFluentVue } = FluentVue;
-
-      const app = createApp({
-        setup() {
-          return { md: marked }
-        }
-      });
-
-      (async function run() {
-        const bundles = []
-
-        let lang = 'en'
-        let b = new FluentBundle(lang)
-        let resource = await fetch(`./locales/${lang}/cfp.flt`).then(r => r.text())
-        b.addResource(new FluentResource(resource))
-        bundles.push(b)
-
-        const fluent = createFluentVue({
-          bundles
-        })
-
-        app.use(fluent)
-
-        let template = await fetch(`./locales/${lang}/cfp.vue`).then(r => r.text())
-        console.log(Vue.compile(template));
-        app.component('main-content', {
-          data() {
-            return ({md: marked, locale: lang})
-          },
-          template: template
-        })
-
-        app.mount('#app')
-      })();
-    </script>
   </body>
 </html>
