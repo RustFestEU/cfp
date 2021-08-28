@@ -7,7 +7,7 @@
 
   <!-- Information about the CFP process and the unconventional handling of deadlines -->
   <h2 v-t:f_submission_deadline_t></h2>
-  <div v-html="md( $t('f_submission_deadline') )"></div>
+  <div v-html="$mt('f_submission_deadline')"></div>
 
 
   <!-- SUBMISSION FORM -->
@@ -28,7 +28,7 @@
       </option>
     </select>
 
-    <div v-html="md( $t('f_submission_lang') )"></div>
+    <div v-html="$mt('f_submission_lang')"></div>
 
     <!-- Language selection for the presentation itself -->
 
@@ -39,7 +39,7 @@
       v-bind:placeholder="submission_language_name"
     />
 
-    <div v-html="md( $t('f_submission_presentation_lang', { submission_language_name }) )"></div>
+    <div v-html="$mt('f_submission_presentation_lang', { submission_language_name })"></div>
 
     <!-- Chosing a presentation format -->
 
@@ -53,12 +53,12 @@
             v-model="presentation_format"
             v-bind:value="opt"
           />
-          {{ $t('f_submission_presentation_format_'+opt+'_t') }}
+          {{ $mti('f_submission_presentation_format_'+opt+'_t') }}
         </label>
       </li>
     </ol>
 
-    <div v-html="md( $t('f_submission_presentation_format') )"></div>
+    <div v-html="$mt('f_submission_presentation_format')"></div>
 
 
     <!-- PROPOSAL CONTENTS -->
@@ -80,7 +80,7 @@
       v-model="summary"
     ></textarea>
 
-    <div v-html="md( $t('f_proposal_summary') )"></div>
+    <div v-html="$mt('f_proposal_summary')"></div>
 
     <!-- Detailed description of the proposal -->
 
@@ -90,13 +90,13 @@
       v-model="description"
     ></textarea>
 
-    <div v-html="md( $t('f_proposal_description') )"></div>
+    <div v-html="$mt('f_proposal_description')"></div>
 
     <!-- Selecting the target audience for the proposed session -->
 
     <h3 v-t:f_proposal_audience_t></h3>
 
-    <div v-html="md( $t('f_proposal_audience') )"></div>
+    <div v-html="$mt('f_proposal_audience')"></div>
 
     <ol>
       <li v-for="opt in audience_targets">
@@ -120,7 +120,39 @@
       v-model="proposal_notes"
     ></textarea>
 
-    <div v-html="md( $t('f_proposal_notes') )"></div>
+    <div v-html="$mt('f_proposal_notes')"></div>
+
+
+    <!-- ABOUT THE SUBMITTER -->
+    <h2 v-t:f_submitter_t></h2>
+
+    <!-- Name of the submitter -->
+
+    <h3><label for="name" v-t:f_submitter_name_t></label></h3>
+    <input
+      name="name"
+      v-model="name"
+    />
+
+    <!-- Tagline or affiliation of the submitter -->
+
+    <h3><label for="tagline" v-t:f_submitter_tagline_t></label></h3>
+    <input
+      name="tagline"
+      v-model="tagline"
+    />
+
+    <div v-html="$mt('f_submitter_tagline')"></div>
+
+    <!-- Tagline or affiliation of the submitter -->
+
+    <h3><label for="bio" v-t:f_submitter_bio_t></label></h3>
+    <textarea
+      name="bio"
+      v-model="bio"
+    ></textarea>
+
+    <div v-html="$mt('f_submitter_bio')"></div>
 
   </form>
 </main>

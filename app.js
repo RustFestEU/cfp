@@ -53,7 +53,9 @@ const app = createApp({
         description: '',
         audience_target: configuration.audience_targets[0],
         proposal_notes: '',
-        
+        name: '',
+        tagline: '',
+        bio: '',
       })
     },
     computed: {
@@ -64,7 +66,7 @@ const app = createApp({
     },
     methods: {
       $mt(...args) {
-        return marked(fluent.format(...args));
+        return marked(fluent.format(...args), { smartypants: true });
       },
       $mti(...args) {
         return marked.parseInline(fluent.format(...args), { smartypants: true });

@@ -1,14 +1,14 @@
 note_some_markdown = TODO: Some typographic markdown is allowed.
 note_most_markdown = TODO: Most markdown constructs are allowed (typography, lists, links etc).
-note_no_markdown = 
+note_no_markdown = TODO: No markdown allowed.
 
 note_editable = TODO: You will be able to change this before publishing.
 
 
-f_title = TODO: Convocatoria de Propuestas RustFest Global 2021
+f_title = Convocatoria de Propuestas RustFest Global 2021
 
 
-f_submission_deadline_t = TODO: Fecha límite de envío
+f_submission_deadline_t = Fecha límite de envío
 f_submission_deadline =
   TODO: Note, the RustFest Global CFP has **no deadline**, the CFP *does not close*,
   but for your talk to be considered for one of our upcoming events,
@@ -123,3 +123,32 @@ f_proposal_notes =
   TODO: Here you may leave notes or remarks for the organizers and the selection committee.
   
   _{note_most_markdown}_
+
+
+f_submitter_t = About you
+
+
+f_submitter_name_t = Name
+
+
+f_submitter_tagline_t = Tagline
+f_submitter_tagline =
+  Title, tagline or organizational affiliation.
+  You may give a shoutout to your company --- especially if they supported you
+  during the preparation for your session (e.g. *“Engineer at Rust Co.”*).
+  Or you could choose your own tagline or shoutout
+  (*“Rust Compiler Magician”*, or even *“Embedded Engineering Consultant available for hire”*).
+  
+  Be sure to keep it short & sweet, as we will show this everywhere
+  on the session info pages and on social media!
+
+  _{note_no_markdown}_  
+  _{note_editable}_
+
+
+f_submitter_bio_t = Bio
+f_submitter_bio =
+  Tell us & the attendees more about yourself. This will be displayed on the session pages.
+
+  _{note_most_markdown}_  
+  _{note_editable}_
