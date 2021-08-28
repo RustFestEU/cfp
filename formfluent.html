@@ -11,58 +11,46 @@
   </head>
   <body>
     <div id="app">
-      <h1>{{ $t('f_title') }}</h1>
-
-      <h2>{{ $t('message.t2') }}</h2>
-      <div v-html="md( $t('message.t2body') )"></div>
-    
-      <h2>{{ $t('message.t3') }}</h2>
-      <h3>{{ $t('message.t4') }}</h3>
-      
-      <form>
-        <label for="locale-select">...</label>
-        <select id="locale-select" name="submission_language" v-model="locale">
-          <option value="en">English</option>
-          <option value="es">Español (Spanish)</option>
-          <option value="ja">日本語で (Japanese)</option>
-        </select>
-      </form>
-
-      <div v-html="$t('f_submission_presentation_lang', { submission_language: 'English'})"></div>
-
-    </div>    
+      <main-content></main>
+    </div>
 
     <script>
-      const { createApp } = Vue,
-        { FluentBundle, FluentResource } = window.FluentBundle,
-        { createFluentVue } = FluentVue
+      const { createApp } = Vue;
+      const { FluentBundle, FluentResource } = window.FluentBundle;
+      const { createFluentVue } = FluentVue;
 
       const app = createApp({
         setup() {
           return { md: marked }
         }
-      })
+      });
 
-      // Create bundles for locales that will be used
-      const enBundle = new FluentBundle('en')
-      const ukBundle = new FluentBundle('ja')
+      (async function run() {
+        const bundles = []
 
-      // Add global resources to the bundles
-      enBundle.addResource(new FluentResource(`
-f_title = RustFest Global 2021 CFP`))
+        let lang = 'en'
+        let b = new FluentBundle(lang)
+        let resource = await fetch(`./locales/${lang}/cfp.flt`).then(r => r.text())
+        b.addResource(new FluentResource(resource))
+        bundles.push(b)
 
-      enBundle.addResource(new FluentResource(`f_submission_presentation_lang =
-  If you plan to present in { $submission_language } you can leave this field unmodified.
-`))
+        const fluent = createFluentVue({
+          bundles
+        })
 
-      // Create plugin istance
-      // bundles - The current negotiated fallback chain of languages
-      const fluent = createFluentVue({
-        bundles: [enBundle, ukBundle]
-      })
+        app.use(fluent)
 
-      app.use(fluent)
-      app.mount('#app')
+        let template = await fetch(`./locales/${lang}/cfp.vue`).then(r => r.text())
+        console.log(Vue.compile(template));
+        app.component('main-content', {
+          data() {
+            return ({md: marked, locale: lang})
+          },
+          template: template
+        })
+
+        app.mount('#app')
+      })();
     </script>
   </body>
 </html>
