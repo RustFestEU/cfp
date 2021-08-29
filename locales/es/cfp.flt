@@ -1,157 +1,124 @@
-note_some_markdown = TODO: Some typographic markdown is allowed.
-note_most_markdown = TODO: Most markdown constructs are allowed (typography, lists, links etc).
-note_no_markdown = TODO: No markdown allowed.
+note_some_markdown = Se permite cierto markdown.
+note_most_markdown = Se permite la mayoría de markdown (Tipografía, listas, enlaces, etc.)
+note_no_markdown = No se permite markdown.
 
-note_editable = TODO: You will be able to change this before publishing.
+note_editable = Podrás editar esto más adelante.
 
 
 f_title = Convocatoria de Propuestas RustFest Global 2021
 
 
-f_submission_deadline_t = Fecha límite de envío
-f_submission_deadline =
-  TODO: Note, the RustFest Global CFP has **no deadline**, the CFP *does not close*,
-  but for your talk to be considered for one of our upcoming events,
-  your submission should generally arrive 3-4 weeks before the event date.
+f_submission_deadline_t = Fecha límite de entrega
+f_submission_deadline = Nota, RustFest Global CFP no tiene fecha límite, la CFP *no cierra*, pero para que tu charla sea considerada para uno de nuestros futuros eventos, tu presentación debería llegarnos 3-4 semanas antes de la fecha del evento.
+
+{"["}Mira en este enlace las fechas límite para la entrega de CFPs para futuros eventos](https://rustfest.global/cfp#upcoming-events)
+
+
+f_submission_t = Entrega
+
+
+f_submission_lang_t = Selecciona el idioma para tu entrega
+f_submission_lang = Selecciona el idioma en el que estará escrito tu presentación.
   
-  {"["}See this link for cut-off dates for CFP submissions for upcoming events](https://rustfest.global/cfp#upcoming-events)
+Cambiar el idioma anterior cambia el idioma de las instrucciones a continuación. Aceptamos presentaciones en los idiomas anteriormente listados y todos los miembros del comité CFP que así lo requieran recibirán traducciones para su evaluación. Escribir tu presentación en cualquiera de estos idiomas *no afectará* a tus posibilidades de ser seleccionado para dar una charla bajo ningún concepto, asi que tómate total libertad de escoger el idioma con el que más cómodo te sientas.
 
-
-f_submission_t = TODO: Submission
-
-
-f_submission_lang_t = TODO: Select the language for your submission
-f_submission_lang =
-  TODO: Select the language you will be writing your submission in.
   
-  Changing the language above changes the language of the instructions on this page.
-  We accept submissions in the provided languages and
-  all CFP-commitee members who require it will receive translations for their evaluation.
-  Writing your submission in any of these languages *will not affect* your chances
-  for being selected to speak in any way, so feel free to choose the language you consider
-  yourself to be most comfortable with.
+{"["}➡ Aprende más sobre el soporte para idiomas de RustFest Global](https://rustfest.global/cfp#language)
+
+
+f_submission_presentation_lang_t = Idioma de la presentación
+f_submission_presentation_lang = Si planeas presentar en { $submission_language_name } puedes dejar este campo sin modificar.
   
-  {"["}➡ Learn more about RustFest Global’s language support](https://rustfest.global/cfp#language)
+Si te gustaría hacer tu presentación en cualquier otro idioma, incluso si no estuvo anteriormente listado, tan solo háznoslo saber aquí. En RustFest queremos hacer que sea posible para todo el mundo mostrar sus ideas y presentar su trabajo de la mejor manera posible, y así asegurarnos de que esas ideas alcanzen el mayor público posible, asi que estamos siempre preparados para apoyar las charlas en un amplio catálogo de idiomas, siempre que así sea posible (ej: a través de subtítulos).
+
+{"["}➡ Aprende más sobre el soporte para idiomas de RustFest Global](https://rustfest.global/cfp#language)
 
 
-f_submission_presentation_lang_t = TODO: Presentation language
-f_submission_presentation_lang =
-  TODO: If you plan to present in { $submission_language_name } you can leave this field unmodified.
-  
-  If you would like to present in any other language than your submission,
-  even if it’s not listed above you may let us know here.
-  At RustFest we want to make it possible for everyone to present their ideas
-  and showcase their work to the best of their ability, ensuring that these ideas
-  reach a wide audience.
-  For this reason we are always happy to host talks in a wide variety of languages,
-  provided that we are able to sufficiently support them (i.e. in the form of subtitling).
+f_presentation_format_standard = duración estándar
+f_presentation_format_longform = duración larga
+f_presentation_format_other = otro
 
-  Feel free to propose multiple languages here (noting the order of your preference),
-  and if accepted we will reach out to discuss the details.
-    
-  {"["}➡ Learn more about RustFest Global’s language support](https://rustfest.global/cfp#language)
+f_submission_presentation_format_t = Formato de Presentación
 
+f_submission_presentation_format_standard_t = TODO: {f_presentation_format_standard} (hasta 25 minutos)
+f_submission_presentation_format_longform_t = TODO: {f_presentation_format_longform} (hasta 50 minutos)
+f_submission_presentation_format_other_t = TODO: {f_presentation_format_other} (por favor especificar en la sección de "comentarios")
 
-f_presentation_format_standard = TODO: standard talk
-f_presentation_format_longform = TODO: longform talk
-f_presentation_format_other = TODO: other
+f_submission_presentation_format = Principalmente buscamos charlas, pero si tienes cualquier otra idea sobre una contribución que no sea específicamente una charla, por favor comparte tu idea con nosotros, y si nos convence nos pondremos en contacto contigo para hablar los detalles.
 
-f_submission_presentation_format_t = TODO: Presentation format
-
-f_submission_presentation_format_standard_t = TODO: {f_presentation_format_standard} (up to 25 min)
-f_submission_presentation_format_longform_t = TODO: {f_presentation_format_longform} (up to 50 min)
-f_submission_presentation_format_other_t = TODO: {f_presentation_format_other} (please explain in the “notes” section)
-
-f_submission_presentation_format =
-  TODO: We are primarily looking for talks, but if you have an idea for a
-  non-talk contribution, feel free to share and if you convinced us
-  we will be in touch to talk through the details.
-  
-  We are accepting standard (up to 25-minute) talks, as well as more in-depth
-  “longform” talks for topics that require more time to expose — in this latter case
-  make sure you touch on why your proposed talk requires more time in the proposal
-  or the “notes” section.
-
+Estamos aceptando charlas de duración estándar (hasta 25 minutos), además de charlas en mayor profundidad sobre temas que requieran más tiempo para indagar — en cuyo caso asegúrate de especificar el por qué tu charla requiere un mayor tiempo, ya sea en tu propuesta, o bien en la sección de "comentarios"
 
 f_proposal_t = TODO: The Proposal
 
 
-f_proposal_title_t = TODO: Title
+f_proposal_title_t = Título
 
 
-f_proposal_summary_t = TODO: Summary
+f_proposal_summary_t = Resumen
 f_proposal_summary =
-  TODO: A short description or summary of your session.
-  You have up to 240 characters to pitch your proposed session,
-  both for the CFP committee and the conference audience.
-  
+  Una descripción corta/un resumen de tu presentación. Dispones de hasta 240 caracteres para proponer tu presentación al comité de CFP y la audiencia. Este resumen será utilizado para evaluar tu charla e incluirla en el programa
+    
   The {f_proposal_title_t} & {f_proposal_summary_t} are the first things
   seen by the program selection committee, and will also be displayed
   in the event schedule listings and social media, so these are the
   most important venues for you to leave an impression both for talk selection
   and, once your proposal is accepted, for the conference attendees as well.
-  
+      
   _{note_some_markdown}_  
   _{note_editable}_
 
 
-f_proposal_description_t = TODO: Description
+f_proposal_description_t = Descripción
 f_proposal_description =
-  TODO: A longer, more detailed description of the proposed session.
-  
-  For more information on how to structure your proposal, read our published
-  {"["}CFP Guidelines](https://rustfest.global/cfp/#guidelines).
+  Una más extensa y detallada descripción sobre tu propuesta.
+  Para más información sobre cómo estructurar tu propuesta, lee nuestra 
+  {"["}guía sobre la CFP](https://rustfest.global/cfp/#guidelines).
   
   _{note_most_markdown}_  
   _{note_editable}_
 
 
-f_proposal_audience_t = TODO: Audience
+f_proposal_audience_t = Audiencia
 f_proposal_audience =
-  TODO: What kind of audience does your session target?  
-  Who will get the most out of your presentation?  
-  Please choose an audience type that fits your proposal the best.
-
+  ¿A qué clase de audiencia está dirigida tu propuesta? ¿Quién aprovecharía más tu presentación?
+  Escoge el nivel de audiencia que mejor encaje con tu presentación planeada:
 f_proposal_audience_beginner-friendly_t = TODO: **Introductory** -- beginner-friendly technical talks, some programming experience is recommended
 f_proposal_audience_some-rust_t = TODO: **Basic Rust** -- some baseline knowledge of Rust or systems programming is recommended
 f_proposal_audience_advanced-rust_t = TODO: **Advanced Rust** -- a solid knowledge of Rust and/or systems programming is recommended
 f_proposal_audience_all-audiences_t = TODO: **Everyone** -- no programming experience required, a talk for all audiences 
 
 
-f_proposal_notes_t = TODO: Notes to the organizers
+f_proposal_notes_t = Comentarios para los organizadores
 f_proposal_notes =
-  TODO: Here you may leave notes or remarks for the organizers and the selection committee.
+  Aquí podrás dejar notas o comentarios para los organizadores y el comité de selección.
   
   _{note_most_markdown}_
 
 
-f_submitter_t = About you
+f_submitter_t = Sobre ti
+
+f_submitter_name_t = Nombre
 
 
-f_submitter_name_t = Name
-
-
-f_submitter_tagline_t = Tagline
+f_submitter_tagline_t = Eslogan
 f_submitter_tagline =
-  Title, tagline or organizational affiliation.  
-  Here you may give a shoutout to your employer --- especially if they supported you
-  during the preparation for your session --- or choose your own tagline or shoutout.
-  Some examples:
+  Un título, eslogan o afiliación organizativa.
+  Podrás darle un reconocimiento a tu compañía, especialmente si te apoyaron durante tu presentación, o bien usar tu propio eslogan o reconocimiento.
+  Por ejemplo:
 
-  - *“Software Engineer at Crab Corp.”*
-  - *“Rust Compiler Magician”*
-  - *“Embedded Rust Engineer, available for contract work”*
+  - *“Ingeniero en Rust Co.”*
+  - *“Mago del Compilador de Rust”*
+  - *“Consultor de Ingeniería Embebida disponible para contratación”*
   
-  Be sure to keep it short & sweet, as we will show this everywhere
-  on the session info pages and on social media!
+  Asegúrate de mantenerlo breve y conciso, lo mostraremos en la página de las sesiones y nuestras redes sociales.
 
   _{note_no_markdown}_  
   _{note_editable}_
 
 
-f_submitter_bio_t = Bio
+f_submitter_bio_t = Biografía
 f_submitter_bio =
-  Tell us & the attendees more about yourself. This will be displayed on the session pages.
+  Cuéntanos a nosotros y la audiencia sobre ti. Esto estará en la página de las sesiones.
 
   _{note_most_markdown}_  
   _{note_editable}_
