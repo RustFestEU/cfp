@@ -15,7 +15,7 @@
   <p>If you already have a proposal in a TOML format (exported from this page
     or another compatible conference) you can import the file here:
 
-    <br><button>Upload Proposal</button>
+    <br><button @click=importProposal>Upload Proposal</button>
   </p>
 
   <p>
@@ -25,7 +25,7 @@
   <strong>TODO: localize strings</strong>
 
   <!-- SUBMISSION FORM -->
-  <h2 v-t:f_submission_t></h2>
+  <h2 id="submission" v-t:f_submission_t></h2>
   
   <form>
   
@@ -85,7 +85,7 @@
 
 
     <!-- PROPOSAL CONTENTS -->
-    <h2 v-t:f_proposal_t></h2>
+    <h2 id="proposal" v-t:f_proposal_t></h2>
 
     <!-- Title of the proposal -->
 
@@ -162,7 +162,7 @@
 
 
     <!-- ABOUT THE SUBMITTER -->
-    <h2 v-t:f_submitter_t></h2>
+    <h2 id="submitter" v-t:f_submitter_t></h2>
 
     <!-- Name of the submitter -->
 

@@ -95,7 +95,7 @@ const app = createApp({
         return '"""\n' +s.trim()+ '\n"""'
       },
       // TODO: https://github.com/eligrey/FileSaver.js/
-      downloadExport(event) {
+      async downloadExport(event) {
         event.preventDefault()
         const d = 'data:text/plain,'+encodeURIComponent(this.dump())
         console.log(d)
@@ -105,6 +105,67 @@ const app = createApp({
         a.download = 'Proposal_RustFest_Global_2021.toml'
         a.rel = 'noopener'
         a.dispatchEvent(new MouseEvent('click'))
+      },
+      async importProposal(event) {
+        event.preventDefault()
+
+        const f = document.createElement('input')
+        f.type = 'file'
+        f.style.opacity = 0
+        document.body.appendChild(f)
+
+        await new Promise((resolve, reject) => {
+          f.addEventListener('change', resolve);
+          f.click()
+        })
+
+        const fr = new FileReader()
+        await new Promise((resolve, reject) => {
+          fr.addEventListener('loadend', resolve)
+          fr.readAsText(f.files[0])
+        })
+
+        let multi = false;
+        let multitext = '';
+        let importdata = [];
+        fr.result.split('\n').filter(ln => ln.startsWith('#') === false).forEach(ln => {
+          let l = ln.trim();
+          if (l.endsWith('"""')) {
+            let kv
+            if (multi) {
+              kv = [multi,multitext.join('\n').trim()];
+              multi = ''
+            } else {
+              multi = l.match(/^\S+/)?.[0];
+              multitext = []
+            }
+            if (kv) importdata.push(kv)
+          } else {
+            let kv;
+            if (!multi) {
+              if (l.trim() !== '') {
+                // Line-ending comments
+                l = l.replace(/\s*#[^"]+$/,'')
+
+                // Parse key-value
+                kv = l.match(/^(\S+) = (".+")$/)
+              }
+            } else {
+              // Multiline-string line
+              multitext.push(l)
+            }
+            if (kv) importdata.push([kv[1],JSON.parse(kv[2])])
+          }
+        })
+
+        const importedSubmission = Object.fromEntries(importdata)
+        for (let k of Object.keys(this.submission)) {
+          if (k in importedSubmission) this.submission[k] = importedSubmission[k]
+        }
+
+        //TODO:two-way binding doesn't do a localechange automatically
+        this.localeChange()
+        document.getElementById('proposal').scrollIntoView()
       }
     },
     template: template
