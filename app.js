@@ -45,23 +45,24 @@ const app = createApp({
         audience_targets: configuration.audience_targets,
 
         // Form data
-        submission_language: locales[0].lang,
-        submission_presentation_lang: '',
-        presentation_format: configuration.presentation_formats[0],
-        title: '',
-        summary: '',
-        description: '',
-        audience_target: configuration.audience_targets[0],
-        proposal_notes: '',
-        name: '',
-        tagline: '',
-        bio: '',
+        submission: {
+          language: locales[0].lang,
+          presentation_lang: '',
+          presentation_format: configuration.presentation_formats[0],
+          title: '',
+          summary: '',
+          description: '',
+          audience_target: configuration.audience_targets[0],
+          proposal_notes: '',
+          name: '',
+          tagline: '',
+          bio: '',
+        }
       })
     },
     computed: {
       submission_language_name() {
-        const c = this.locales.find(loc => loc.lang === this.submission_language);
-        return c ? c.name : this.locales[0].name
+        return this.languageName(this.submission.language) ?? this.locales[0].name
       }
     },
     methods: {
@@ -71,8 +72,39 @@ const app = createApp({
       $mti(...args) {
         return marked.parseInline(fluent.format(...args), { smartypants: true });
       },
+      languageName(language) {
+        const c = this.locales.find(loc => loc.lang === language);
+        return c ? c.name : void 0
+      },
       localeChange(event) {
-        fluent.bundles = localeBundles[this.submission_language]
+        fluent.bundles = localeBundles[this.submission.language]
+      },
+      dump() {
+        console.log(this.submission)
+        let s = '# EXPORTED PROPOSAL - RustFest Global 2021\n'
+          +'# '+new Date().toLocaleString()+'\n'
+          +'# '+window.location.href+'\n'
+          +'\n'
+          +Array.from(document.querySelectorAll('[data-export-format]')).map(e => e.dataset.exportFormat).join('\n\n')
+        return s
+      },
+      tomlString(s) {
+        return JSON.stringify(s.trim())
+      },
+      tomlText(s) {
+        return '"""\n' +s.trim()+ '\n"""'
+      },
+      // TODO: https://github.com/eligrey/FileSaver.js/
+      downloadExport(event) {
+        event.preventDefault()
+        const d = 'data:text/plain,'+encodeURIComponent(this.dump())
+        console.log(d)
+
+        const a = document.createElement('a')
+        a.href = d
+        a.download = 'Proposal_RustFest_Global_2021.toml'
+        a.rel = 'noopener'
+        a.dispatchEvent(new MouseEvent('click'))
       }
     },
     template: template
