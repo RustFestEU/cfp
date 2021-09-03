@@ -40,15 +40,15 @@ f_presentation_format_other = otro
 
 f_submission_presentation_format_t = Formato de Presentación
 
-f_submission_presentation_format_standard_t = TODO: {f_presentation_format_standard} (hasta 25 minutos)
-f_submission_presentation_format_longform_t = TODO: {f_presentation_format_longform} (hasta 50 minutos)
-f_submission_presentation_format_other_t = TODO: {f_presentation_format_other} (por favor especificar en la sección de "comentarios")
+f_submission_presentation_format_standard_t = {f_presentation_format_standard} (hasta 25 minutos)
+f_submission_presentation_format_longform_t = {f_presentation_format_longform} (hasta 50 minutos)
+f_submission_presentation_format_other_t = {f_presentation_format_other} (por favor especificar en la sección de "comentarios")
 
 f_submission_presentation_format = Principalmente buscamos charlas, pero si tienes cualquier otra idea sobre una contribución que no sea específicamente una charla, por favor comparte tu idea con nosotros, y si nos convence nos pondremos en contacto contigo para hablar los detalles.
 
 Estamos aceptando charlas de duración estándar (hasta 25 minutos), además de charlas en mayor profundidad sobre temas que requieran más tiempo para indagar — en cuyo caso asegúrate de especificar el por qué tu charla requiere un mayor tiempo, ya sea en tu propuesta, o bien en la sección de "comentarios"
 
-f_proposal_t = TODO: The Proposal
+f_proposal_t = La propuesta
 
 
 f_proposal_title_t = Título
@@ -82,10 +82,10 @@ f_proposal_audience_t = Audiencia
 f_proposal_audience =
   ¿A qué clase de audiencia está dirigida tu propuesta? ¿Quién aprovecharía más tu presentación?
   Escoge el nivel de audiencia que mejor encaje con tu presentación planeada:
-f_proposal_audience_beginner-friendly_t = TODO: **Introductory** -- beginner-friendly technical talks, some programming experience is recommended
-f_proposal_audience_some-rust_t = TODO: **Basic Rust** -- some baseline knowledge of Rust or systems programming is recommended
-f_proposal_audience_advanced-rust_t = TODO: **Advanced Rust** -- a solid knowledge of Rust and/or systems programming is recommended
-f_proposal_audience_all-audiences_t = TODO: **Everyone** -- no programming experience required, a talk for all audiences 
+#f_proposal_audience_beginner-friendly_t =
+#f_proposal_audience_some-rust_t =
+#f_proposal_audience_advanced-rust_t =
+#f_proposal_audience_all-audiences_t =
 
 
 f_proposal_notes_t = Comentarios para los organizadores
