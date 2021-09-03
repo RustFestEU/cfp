@@ -12,18 +12,25 @@ const app = createApp({
   const localeBundles = {}
 
   let configuration = await fetch(`./config.json`).then(r => r.json())
-  const { locales } = configuration;
+  const { approot, locales } = configuration;
 
   // Fetch & create all locale bundles
   for (loc of locales) {
     const b = new FluentBundle(loc.lang)
-    const resource = await fetch(`./locales/${loc.lang}/cfp.flt`).then(r => r.text())
+    const resource = await fetch(`${approot ?? '.'}/locales/${loc.lang}/cfp.flt`).then(r => r.text())
 
     if (resource) {
       b.addResource(new FluentResource(resource))
       localeBundles[loc.lang] = [b];
     } else {
       console.log(`Locale bundle ${loc.lang} not loaded!`);
+    }
+  }
+
+  // Add the fallback locale to all other language bundles
+  for (const [lang,bundle] of Object.entries(localeBundles)) {
+    if (lang !== configuration['fallback_locale']) {
+      bundle.push(localeBundles[configuration['fallback_locale']][0]);
     }
   }
 
@@ -34,7 +41,7 @@ const app = createApp({
   app.use(fluent)
 
 
-  let template = await fetch(`./pages/cfp.vue`).then(r => r.text())
+  let template = await fetch(`${approot ?? '.'}/cfp.vue`).then(r => r.text())
 
   app.component('main-content', {
     data() {
@@ -166,10 +173,14 @@ const app = createApp({
         //TODO:two-way binding doesn't do a localechange automatically
         this.localeChange()
         document.getElementById('proposal').scrollIntoView()
+      },
+      autogrow(event) {
+        const box = event.target
+        box.style.height = box.scrollHeight+'px'
       }
     },
     template: template
   })
 
-  app.mount('#app')
+  app.mount(configuration['mountroot'] ?? '#app')
 })();

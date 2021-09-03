@@ -51,6 +51,7 @@
 
     <h3><label for="submission_presentation_lang" v-t:f_submission_presentation_lang_t></label></h3>
     <input
+      type="text"
       name="submission_presentation_lang"
       v-model="submission.presentation_lang"
       v-bind:placeholder="submission_language_name"
@@ -91,6 +92,7 @@
 
     <h3><label for="title" v-t:f_proposal_title_t></label></h3>
     <input
+      type="text"
       name="title"
       v-model="submission.title"
       v-bind:data-export-format=
@@ -120,6 +122,7 @@
       v-bind:data-export-format=
         "'# '+ $t('f_proposal_t') +' - '+ $t('f_proposal_description_t') +'\n'
         +'description = '+ tomlText(submission.description)"
+      @focus="autogrow" @input="autogrow"
     ></textarea>
 
     <div v-html="$mt('f_proposal_description')"></div>
@@ -156,6 +159,7 @@
       v-bind:data-export-format=
         "'# '+ $t('f_proposal_t') +' - '+ $t('f_proposal_notes_t') +'\n'
         +'proposal_notes = '+ tomlText(submission.proposal_notes)"
+      @focus="autogrow" @input="autogrow"
     ></textarea>
 
     <div v-html="$mt('f_proposal_notes')"></div>
@@ -168,6 +172,7 @@
 
     <h3><label for="name" v-t:f_submitter_name_t></label></h3>
     <input
+      type="text"
       name="name"
       v-model="submission.name"
       v-bind:data-export-format=
@@ -179,6 +184,7 @@
 
     <h3><label for="tagline" v-t:f_submitter_tagline_t></label></h3>
     <input
+      type="text"
       name="tagline"
       v-model="submission.tagline"
       v-bind:data-export-format=
@@ -195,8 +201,9 @@
       name="bio"
       v-model="submission.bio"
       v-bind:data-export-format=
-       "'# '+ $t('f_submitter_t') +' - '+ $t('f_submitter_bio_t') +'\n'
-       +'bio = '+ tomlText(submission.bio)"
+        "'# '+ $t('f_submitter_t') +' - '+ $t('f_submitter_bio_t') +'\n'
+        +'bio = '+ tomlText(submission.bio)"
+      @focus="autogrow" @input="autogrow"
     ></textarea>
 
     <div v-html="$mt('f_submitter_bio')"></div>
