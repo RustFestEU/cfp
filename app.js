@@ -22,12 +22,32 @@ const app = createApp({
 
   // Fetch & create all locale bundles
   for (loc of locales) {
-    const b = new FluentBundle(loc.lang)
-    const resource = await fetch(`${approot ?? '.'}/locales/${loc.lang}/cfp.flt`).then(r => r.text())
+    // useIsolating OFF (needed to avoid junk in interpolated URLs)
+    // https://projectfluent.org/fluent.js/bundle/classes/fluentbundle.html#constructor
+    const b = new FluentBundle(loc.lang, { useIsolating: false });
+    const resource = await fetch(`${approot ?? '.'}/locales/${loc.lang}/cfp.flt`).then(r => r.text());
 
     if (resource) {
+      // Add translations to bundle
       b.addResource(new FluentResource(resource))
+
+      // Add event information to bundle
+      for (e of configuration.events) {
+        const eventRes = [];
+
+        eventRes.push(`event-${e.id} = ${e.name}`);
+        if (e.summary[loc.lang]) {
+          eventRes.push(`event-${e.id}-summary = ${e.summary[loc.lang]} [ℹ️](${e.link})`);
+        }
+        eventRes.push(`event-${e.id}-date = ${e.date}`);
+
+        b.addResource(new FluentResource(eventRes.join('\n')));
+      }
+
+      // Finalize locale
       localeBundles[loc.lang] = [b];
+      window.LB = localeBundles;
+
     } else {
       console.log(`Locale bundle ${loc.lang} not loaded!`);
     }
@@ -51,11 +71,20 @@ const app = createApp({
 
   app.component('main-content', {
     data() {
+      const links = Object.fromEntries(
+        Object.entries(configuration)
+          .filter( ([k]) => k.startsWith('link_') )
+          .map( ([k,v]) => [camelCase(k),v])
+      );
+
       return ({
         md: marked,
         locales,
         presentation_formats: configuration.presentation_formats,
         audience_targets: configuration.audience_targets,
+        events: configuration.events.map(i => i.id),
+
+        ...links,
 
         // Form data
         submission: {
@@ -66,6 +95,7 @@ const app = createApp({
           summary: '',
           description: '',
           audience_target: configuration.audience_targets[0],
+          event_target: 'default',
           proposal_notes: '',
           name: '',
           tagline: '',
@@ -102,7 +132,7 @@ const app = createApp({
         return s
       },
       tomlString(s) {
-        return JSON.stringify(s.trim())
+        return typeof s === 'string' ? JSON.stringify(s.trim()) : '';
       },
       tomlText(s) {
         return '"""\n' +s.trim()+ '\n"""'

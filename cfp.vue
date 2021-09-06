@@ -7,22 +7,24 @@
 
   <!-- Information about the CFP process and the unconventional handling of deadlines -->
   <h2 v-t:f-submission-deadline-t></h2>
-  <div v-html="$mt('f-submission-deadline')"></div>
+  <div v-html="$mt('f-submission-deadline', { linkUpcomingEvents })"></div>
+
+  <div v-html="$mt('f-form-notes')"></div>
 
 
   <!-- Upload an existing proposal and manage existing submissions -->
-  <h2>Upload & Manage proposals</h2>
-  <p>If you already have a proposal in a TOML format (exported from this page
-    or another compatible conference) you can import the file here:
+  <h2 v-t:f-manage-t></h2>
+  <div v-html="$mt('f-manage')"></div>
+  <button @click=importProposal v-t:f-manage-upload-btn></button>
 
-    <br><button @click=importProposal>Upload Proposal</button>
-  </p>
+  <div v-html="$mt('f-manage-auth')"></div>
 
-  <p>
-    You may also confirm your email address to manage your existing submissions:
-    <br><input type="email"><button>Send Code</button>
-  </p>
-  <strong>TODO: localize strings</strong>
+  <div>
+    <h3><label for="auth-email" v-t:f-contact-email-t></label></h3>
+
+    <input type="email" name="auth-email">
+    <button @click=importProposal v-t:f-manage-auth-btn></button>
+  </div>
 
   <!-- SUBMISSION FORM -->
   <h2 id="submission" v-t:f-submission-t></h2>
@@ -45,7 +47,7 @@
       </option>
     </select>
 
-    <div v-html="$mt('f-submission-lang')"></div>
+    <div v-html="$mt('f-submission-lang', { linkSupportedLanguages })"></div>
 
     <!-- Language selection for the presentation itself -->
 
@@ -60,7 +62,7 @@
         +'presentation_lang = ' + tomlString(submission.presentation_lang)"
     />
 
-    <div v-html="$mt('f-submission-presentation-lang', { submission_language_name })"></div>
+    <div v-html="$mt('f-submission-presentation-lang', { submission_language_name, linkSupportedLanguages })"></div>
 
     <!-- Chosing a presentation format -->
 
@@ -125,7 +127,7 @@
       @focus="autogrow" @input="autogrow"
     ></textarea>
 
-    <div v-html="$mt('f-proposal-description')"></div>
+    <div v-html="$mt('f-proposal-description', { linkCfpGuidelines })"></div>
 
     <!-- Selecting the target audience for the proposed session -->
 
@@ -150,6 +152,42 @@
       </li>
     </ol>
 
+    <!-- Highlight this proposal for being suited particularly well to one specific event -->
+
+    <h3 v-t:f-proposal-highlight-t></h3>
+
+    <div v-html="$mt('f-proposal-highlight')"></div>
+
+    <ol v-bind:data-export-format=
+      "'# '+ $t('f-proposal-t') +' - '+ $t('f-proposal-highlight-t') +'\n'
+      +'event_target = '+ tomlString(submission.event_target)"
+    >
+      <li>
+        <label>
+          <input
+            type="radio"
+            name="event_target"
+            v-model="submission.event_target"
+            v-bind:value="'default'"
+          />
+          <strong v-html="$mti('event-none')"></strong><br />
+          <em v-html="$mti('event-none-summary')"></em>
+        </label>
+      </li>
+      <li v-for="opt in events">
+        <label>
+          <input
+            type="radio"
+            name="event_target"
+            v-model="submission.event_target"
+            v-bind:value="opt"
+          />
+          <strong v-html="$mti('event-'+opt)"></strong><br />
+          <span v-html="$mti('event-'+opt+'-summary')"></span>
+        </label>
+      </li>
+    </ol>
+    
     <!-- Notes for the organizers about the proposal -->
 
     <h3><label for="proposal_notes" v-t:f-proposal-notes-t></label></h3>
@@ -208,6 +246,29 @@
 
     <div v-html="$mt('f-submitter-bio')"></div>
 
-    <button @click="downloadExport">Download Proposal</button>
+
+    <h2 v-html="$mt('f-manage-download-t')"></h2>
+    <div v-html="$mt('f-manage-download')"></div>
+
+    <button @click="downloadExport" v-t:f-manage-download-btn></button>
+
+
+    <!-- CONTACT INFORMATION -->
+    <h2 id="contact" v-t:f-contact-t></h2>
+
+    <!-- Submitter email address -->
+    <h3><label for="email" v-t:f-contact-email-t></label></h3>
+    <input
+      type="email"
+      name="email"
+      v-model="submission.email"
+      v-bind:data-export-format=
+        "'# '+ $t('f-submitter-t') +' - '+ $t('f-contact-email-t') +'\n'
+        +'email = '+ tomlString(submission.email)"
+    />
+
+    <div v-html="$mt('f-contact-email')"></div>
+
+    <button>Submit Proposal</button>
   </form>
 </main>

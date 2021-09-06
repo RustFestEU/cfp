@@ -1,4 +1,4 @@
-# Version: v20210826.2
+# Version: v20210906.1
 # Contributors:
 # - flaki (flak.is)
 
@@ -15,6 +15,8 @@
 
 -note-editable = You will be able to change this before publishing.
 
+-optional = optional
+
 
 f-title = RustFest Global 2021 CFP
 
@@ -23,7 +25,28 @@ f-submission-deadline-t = Submission deadline
 f-submission-deadline =
   Note, the RustFest Global CFP has **no deadline**, the CFP *does not close*, but for your talk to be considered for one of our upcoming events, your submission should generally arrive 3-4 weeks before the event date.
   
-  {"["}See this link for cut-off dates for CFP submissions for upcoming events](https://rustfest.global/cfp#upcoming-events)
+  {"["}See this link for cut-off dates for CFP submissions for upcoming events](
+  {$linkUpcomingEvents}
+  )
+
+f-form-notes = Filling out all fields is required, except for the ones explicitly marked as "optional".
+
+
+f-manage-t = Upload & manage proposals
+f-manage = If you already have a proposal in a TOML format (exported from this page or another compatible conference) you can import the file here:
+f-manage-upload-btn = Upload Proposal
+
+f-manage-auth = You may also authenticate with your email address to manage your existing submissions:
+f-manage-auth-btn = Send Code
+
+f-manage-download-t = Download proposal
+f-manage-download =
+  Here you can download your proposal in a text format.
+  This may come handy if you want to finish and submit your proposal later.
+
+  Note that we will also send you your completed proposal via email after you have submitted and confirmed your submission below.
+f-manage-download-btn = Download Proposal
+
 
 
 f-submission-t = Submission
@@ -37,7 +60,7 @@ f-submission-lang =
   We accept submissions in the provided languages and all CFP-commitee members who require it will receive translations for their evaluation.
   Writing your submission in any of these languages *will not affect* your chances for being selected to speak in any way, so feel free to choose the language you consider yourself to be most comfortable with.
   
-  {"["}➡ Learn more about RustFest Global’s language support](https://rustfest.global/cfp#language)
+  {"["}Learn more about RustFest Global’s language support]({$linkSupportedLanguages})
 
 
 f-submission-presentation-lang-t = Presentation language
@@ -50,7 +73,7 @@ f-submission-presentation-lang =
   
   Feel free to propose multiple languages here (noting the order of your preference), and if accepted we will reach out to discuss the details.
   
-  {"["}➡ Learn more about RustFest Global’s language support](https://rustfest.global/cfp#language)
+  {"["}Learn more about RustFest Global’s language support]({$linkSupportedLanguages})
 
 
 f-presentation-format-standard = standard talk
@@ -90,7 +113,7 @@ f-proposal-description-t = Description
 f-proposal-description =
   A longer, more detailed description of the proposed session.
   
-  For more information on how to structure your proposal, read our published [CFP Guidelines](https://rustfest.global/cfp/#guidelines).
+  For more information on how to structure your proposal, read our published [CFP Guidelines]({$linkCfpGuidelines}).
   
   _{-note-most-markdown}_  
   _{-note-editable}_
@@ -108,7 +131,7 @@ f-proposal-audience-advanced-rust-t = **Advanced Rust** -- a solid knowledge of 
 f-proposal-audience-all-audiences-t = **Everyone** -- no programming experience required, a talk for all audiences 
 
 
-f-proposal-notes-t = Notes to the organizers
+f-proposal-notes-t = Notes to the organizers ({-optional})
 f-proposal-notes =
   Here you may leave notes or remarks for the organizers and the selection committee.
   
@@ -143,3 +166,26 @@ f-submitter-bio =
 
   _{-note-most-markdown}_  
   _{-note-editable}_
+
+
+f-proposal-highlight-t = Suggested Edition
+f-proposal-highlight =
+  If you believe your proposal would be a great fit for an upcoming event, here you may highlight it for the organizers of that event.
+  This may be useful when your proposal is better suited for that particular event than the others.
+
+  Note that _this is just a recommendation_, regardless of your selection below all teams will have access to your proposal and may choose to include it in their program, so if you have no preference just leave this on the default value.
+
+
+event-none = All
+event-none-summary = This proposal should be a great fit for any of the upcoming events.
+
+
+
+f-contact-t = Contact information
+
+f-contact-email-t = Email address
+f-contact-email =
+  We will send you a confirmation of your received proposal.
+  The teams will use your email to contact you about followups and notifications about the selection process.
+  You will be able to edit, review the status of and retract your proposals by authenticating using this address.
+
