@@ -29,7 +29,7 @@
   <!-- SUBMISSION FORM -->
   <h2 id="submission" v-t:f-submission-t></h2>
   
-  <form>
+  <form @submit.prevent="submitProposal">
   
     <!-- Language selection for the submission and the instructions -->
 
@@ -271,4 +271,23 @@
 
     <button>Submit Proposal</button>
   </form>
+
+  <vue-final-modal v-model="confirmDialog" classes="modal-container" content-class="modal-content">
+    <button class="modal__close" @click="submitProposalCancel">
+      <svg focusable="false" width="2em" height="2em" viewBox="0 0 24 24" data-v-7ca2000c=""><path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41z" fill="currentColor"></path></svg>
+    </button>
+    <span class="modal__title">Submit your proposal</span>
+    <div class="modal__content">
+      We have sent an unique numeric code to your email address:
+      <strong>{{ submission.email }}</strong>
+
+      Use the code you have received below to confirm your proposal submission:
+      <input type="text" />
+    </div>
+    <div class="modal__action">
+      <button class="v-btn"  @click="submitProposal">Confirm</button>
+      <button class="v-btn"  @click="submitProposalCancel">Cancel</button>
+    </div>
+  </vue-final-modal>
+
 </main>

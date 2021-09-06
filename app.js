@@ -1,6 +1,7 @@
 const { createApp } = Vue;
 const { FluentBundle, FluentResource } = window.FluentBundle;
 const { createFluentVue } = FluentVue;
+const VueFinalModal = window.VueFinalModal();
 
 const camelCase = (s) => (s??'').replace(/\_(.)/g, (_,c) => c.toUpperCase());
 
@@ -69,6 +70,9 @@ const app = createApp({
 
   let template = await fetch(`${approot ?? '.'}/cfp.vue`).then(r => r.text())
 
+  app.use(VueFinalModal);
+
+
   app.component('main-content', {
     data() {
       const links = Object.fromEntries(
@@ -78,6 +82,8 @@ const app = createApp({
       );
 
       return ({
+        confirmDialog: false,
+
         md: marked,
         locales,
         presentation_formats: configuration.presentation_formats,
@@ -213,7 +219,13 @@ const app = createApp({
       autogrow(event) {
         const box = event.target
         box.style.height = box.scrollHeight+'px'
-      }
+      },
+      submitProposal(event) {
+        this.confirmDialog = true;
+      },
+      submitProposalCancel(event) {
+        this.confirmDialog = false;
+      },
     },
     template: template
   })
