@@ -2,6 +2,12 @@ const { createApp } = Vue;
 const { FluentBundle, FluentResource } = window.FluentBundle;
 const { createFluentVue } = FluentVue;
 
+const camelCase = (s) => (s??'').replace(/\_(.)/g, (_,c) => c.toUpperCase());
+
+
+const marked = window.marked;
+marked.use(markedExtLinks());
+
 const app = createApp({
   setup() {
     return { md: marked }
@@ -184,3 +190,32 @@ const app = createApp({
 
   app.mount(configuration['mountroot'] ?? '#app')
 })();
+
+
+// All links open in a new window
+function markedExtLinks() {
+  const escapeReplaceNoEncode = /[<>"']|&(?!#?\w+;)/g;
+  const escapeReplacements = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  };
+  const getEscapeReplacement = (ch) => escapeReplacements[ch];
+  const escape = (href) => href.replace(escapeReplaceNoEncode, getEscapeReplacement);
+
+  return { renderer: {
+    link(href, title, text) {
+      if (href === null) {
+        return text;
+      }
+      let out = '<a target="_blank" href="' + escape(href) + '"';
+      if (title) {
+        out += ' title="' + title + '"';
+      }
+      out += '>' + text + '</a>';
+      return out;
+    }
+  }}
+}
