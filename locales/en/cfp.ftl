@@ -1,6 +1,6 @@
-# Version: v20210906.1
-# Contributors:
-# - flaki (flak.is)
+### Version: v20210906.1
+### Contributors:
+### - flaki (flak.is)
 
 -lang = en
 -lang-name = English

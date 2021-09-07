@@ -1,6 +1,6 @@
-# Version: v20210826.1
-# Contributors:
-# - tamacodechi
+### Version: v20210826.1
+### Contributors:
+### - tamacodechi
 
 -lang = es
 -lang-name = Español
