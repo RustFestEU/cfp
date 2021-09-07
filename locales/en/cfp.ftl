@@ -2,12 +2,14 @@
 ### Contributors:
 ### - flaki (flak.is)
 
+## Information about the current language
+
 -lang = en
 -lang-name = English
 -lang-name-english = English
 
 
-# Terms, to be used as part of the translations only
+## Terms, to be used as part of the translations only
 
 -note-some-markdown = Some typographic markdown is allowed.
 -note-most-markdown = Most markdown constructs are allowed (typography, lists, links etc).
@@ -18,8 +20,14 @@
 -optional = optional
 
 
+## CFP form global strings
+
 f-title = RustFest Global 2021 CFP
 
+f-form-notes = Filling out all fields is required, except for the ones explicitly marked as "optional".
+
+
+## Submission deadline
 
 f-submission-deadline-t = Submission deadline
 f-submission-deadline =
@@ -29,8 +37,7 @@ f-submission-deadline =
   {$linkUpcomingEvents}
   )
 
-f-form-notes = Filling out all fields is required, except for the ones explicitly marked as "optional".
-
+## Submission management
 
 f-manage-t = Upload & manage proposals
 f-manage = If you already have a proposal in a TOML format (exported from this page or another compatible conference) you can import the file here:
@@ -48,6 +55,7 @@ f-manage-download =
 f-manage-download-btn = Download Proposal
 
 
+## Submission detail fields
 
 f-submission-t = Submission
 
@@ -91,6 +99,8 @@ f-submission-presentation-format =
   
   We are accepting standard (up to 25-minute) talks, as well as more in-depth “longform” talks for topics that require more time to expose — in this latter case make sure you touch on why your proposed talk requires more time in the proposal or the “notes” section.
 
+
+## Proposal detail fields
 
 f-proposal-t = The proposal
 
@@ -138,6 +148,8 @@ f-proposal-notes =
   _{-note-most-markdown}_
 
 
+## Submitter information fields
+
 f-submitter-t = About you
 
 
@@ -180,6 +192,7 @@ event-none = All
 event-none-summary = This proposal should be a great fit for any of the upcoming events.
 
 
+## Contact information fields
 
 f-contact-t = Contact information
 

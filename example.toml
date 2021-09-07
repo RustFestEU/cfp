@@ -1,0 +1,60 @@
+# EXPORTED PROPOSAL - RustFest Global 2021
+# 8/29/2021, 1:46:19 PM
+# https://rustfesteu.github.io/cfp/
+
+## Select the language for your submission
+language = "en" # English
+
+## Presentation language
+presentation_lang = ""
+
+## Presentation format
+presentation_format = "standard"
+
+## The Proposal
+
+### Title
+title = "A little Waasabi, to spicen up your online events!"
+
+### Summary
+summary = """
+
+In spring 2020 the pandemic has brought us a thick roster of online events, but disappointment soon followed: many of us found online conferences lackluster & boring. For our own event, we started work on the solution: Waasabi was born.
+
+"""
+
+### Description
+description = """
+
+Waasabi is an experimental framework for building online live experiences. It puts realtime engagement, customizability front and center to let anyone create events that fit their own brand, their own ideas and their own community.
+
+While out-of-the-box event platforms exist, and the video platforms of the web’s giants promise to serve an audience on a silver plate, if someone is trying to do something *different*, a more refined experience, they soon realize they need to start from scratch. Waasabi aims to solve this problem by giving a pre-built set of components for building interactive live video streaming experiences, that can be easily finetuned to deliver the vision of the organizing team.
+
+This is an open source toolkit we have built with my personal mantra top of mind: play, experiment, delight.
+
+"""
+
+### Audience
+audience_target = "all-audiences"
+
+### Notes to the organizers
+proposal_notes = """
+
+We have used the Waasabi streaming framework to run our conference, RustFest Global in 2020 in 3 continental timezones, and make the event truly global. Back then, only a prototype, Waasabi has matured a lot in the past months and I’m happy to showcase some of its features, as well as the learnings from the experimentation which informed the current development and our future uses for our upcoming 2021 event.
+
+"""
+
+## About you
+
+### Name
+name = "Istvan Szmozsanszky \"Flaki\""
+
+### Tagline
+tagline = "Open Source Foxherder @ Skylark"
+
+### Bio
+bio = """
+
+Open Web hacker. Hungarian living in Estonia. Building [online communities](https://opencollective.com/rustfest) and [tools for building online communities](https://baytech.community), also occasionally [tools for building tools](https://waasabi.org/) for online communities. 🙃
+
+"""
