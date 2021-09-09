@@ -26,7 +26,7 @@ const app = createApp({
     // useIsolating OFF (needed to avoid junk in interpolated URLs)
     // https://projectfluent.org/fluent.js/bundle/classes/fluentbundle.html#constructor
     const b = new FluentBundle(loc.lang, { useIsolating: false });
-    const resource = await fetch(`${approot ?? '.'}/locales/${loc.lang}/cfp.flt`).then(r => r.text());
+    const resource = await fetch(`${approot ?? '.'}/locales/${loc.lang}/cfp.ftl`).then(r => r.text());
 
     if (resource) {
       // Add translations to bundle
