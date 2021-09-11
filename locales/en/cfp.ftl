@@ -5,7 +5,6 @@
 
 ## Information about the current language
 
--lang = en
 -lang-name = English
 -lang-name-english = English
 
