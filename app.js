@@ -1,5 +1,9 @@
+import Configuration from './src/config.js';
+import * as Form from './src/form.js';
+
+import { locales, bundles, languages, defaultLocale } from './src/l10n.js';
+
 const { createApp } = Vue;
-const { FluentBundle, FluentResource } = window.FluentBundle;
 const { createFluentVue } = FluentVue;
 const VueFinalModal = window.VueFinalModal();
 
@@ -15,104 +19,66 @@ const app = createApp({
   }
 });
 
-(async function run() {
-  const localeBundles = {}
-
-  let configuration = await fetch(`./config.json`).then(r => r.json())
-  const { approot, locales } = configuration;
-
-  // Fetch & create all locale bundles
-  for (loc of locales) {
-    // useIsolating OFF (needed to avoid junk in interpolated URLs)
-    // https://projectfluent.org/fluent.js/bundle/classes/fluentbundle.html#constructor
-    const b = new FluentBundle(loc.lang, { useIsolating: false });
-    const resource = await fetch(`${approot ?? '.'}/locales/${loc.lang}/cfp.ftl`).then(r => r.text());
-
-    if (resource) {
-      // Add translations to bundle
-      b.addResource(new FluentResource(resource))
-
-      // Add event information to bundle
-      for (e of configuration.events) {
-        const eventRes = [];
-
-        eventRes.push(`event-${e.id} = ${e.name}`);
-        if (e.summary[loc.lang]) {
-          eventRes.push(`event-${e.id}-summary = ${e.summary[loc.lang]} [ℹ️](${e.link})`);
-        }
-        eventRes.push(`event-${e.id}-date = ${e.date}`);
-
-        b.addResource(new FluentResource(eventRes.join('\n')));
-      }
-
-      // Finalize locale
-      localeBundles[loc.lang] = [b];
-      window.LB = localeBundles;
-
-    } else {
-      console.log(`Locale bundle ${loc.lang} not loaded!`);
-    }
-  }
-
-  // Add the fallback locale to all other language bundles
-  for (const [lang,bundle] of Object.entries(localeBundles)) {
-    if (lang !== configuration['fallback_locale']) {
-      bundle.push(localeBundles[configuration['fallback_locale']][0]);
-    }
-  }
+(async function run() {  
+  const { approot } = Configuration;
 
   const fluent = createFluentVue({
-    bundles: localeBundles[locales[0].lang]
-  })
-
-  app.use(fluent)
+    bundles: bundles[defaultLocale]
+  });
+  app.use(fluent);
 
 
   let template = await fetch(`${approot ?? '.'}/cfp.vue`).then(r => r.text())
+
+  const links = Object.fromEntries(
+    Configuration.links
+      .map(({ label, url }) => ([ 'link_'+label, url ]))
+      .map( ([k,v]) => [camelCase(k),v])
+  );
+
 
   app.use(VueFinalModal);
 
 
   app.component('main-content', {
     data() {
-      const links = Object.fromEntries(
-        Object.entries(configuration)
-          .filter( ([k]) => k.startsWith('link_') )
-          .map( ([k,v]) => [camelCase(k),v])
-      );
-
       return ({
         confirmDialog: false,
 
         md: marked,
-        locales,
-        presentation_formats: configuration.presentation_formats,
-        audience_targets: configuration.audience_targets,
-        events: configuration.events.map(i => i.id),
+        locales, languages,
+        presentation_formats: Configuration.presentation_formats,
+        audience_targets: Configuration.audience_targets,
+        events: Configuration.events,
+        verification_code: '',
 
         ...links,
 
         // Form data
         submission: {
-          language: locales[0].lang,
+          language: defaultLocale, // TODO: take url language into account
           presentation_lang: '',
-          presentation_format: configuration.presentation_formats[0],
+          presentation_format: Configuration.presentation_formats[0].label,
           title: '',
           summary: '',
           description: '',
-          audience_target: configuration.audience_targets[0],
-          event_target: 'default',
-          proposal_notes: '',
+          audience_target: Configuration.audience_targets[0].label,
+          event_target: '',
+          notes: '',
           name: '',
           tagline: '',
           bio: '',
+          email: '',
         }
       })
     },
     computed: {
-      submission_language_name() {
-        return this.languageName(this.submission.language) ?? this.locales[0].name
-      }
+      currentLang() {
+        return this.languages[this.submission.language][this.submission.language];
+      },
+      currentEventTarget() {
+        return this.events.find(e => e.label == this.submission.event_target)?.name ?? this.$mti('event-none');
+      },
     },
     methods: {
       $mt(...args) {
@@ -121,18 +87,13 @@ const app = createApp({
       $mti(...args) {
         return marked.parseInline(fluent.format(...args), { smartypants: true });
       },
-      languageName(language) {
-        const c = this.locales.find(loc => loc.lang === language);
-        return c ? c.name : void 0
-      },
       localeChange(event) {
-        fluent.bundles = localeBundles[this.submission.language]
+        fluent.bundles = bundles[this.submission.language]
       },
       dump() {
-        console.log(this.submission)
         let s = '# EXPORTED PROPOSAL - RustFest Global 2021\n'
-          +'# '+new Date().toLocaleString()+'\n'
-          +'# '+window.location.href+'\n'
+          +'## '+new Date().toLocaleString()+'\n'
+          +'## '+window.location.href+'\n'
           +'\n'
           +Array.from(document.querySelectorAll('[data-export-format]')).map(e => e.dataset.exportFormat).join('\n\n')
         return s
@@ -147,7 +108,6 @@ const app = createApp({
       async downloadExport(event) {
         event.preventDefault()
         const d = 'data:text/plain,'+encodeURIComponent(this.dump())
-        console.log(d)
 
         const a = document.createElement('a')
         a.href = d
@@ -221,7 +181,13 @@ const app = createApp({
         box.style.height = box.scrollHeight+'px'
       },
       submitProposal(event) {
+        // TODO: validate required fields
+        Form.verify(this.submission.email);
         this.confirmDialog = true;
+      },
+      submitProposalSend(event) {
+        Form.submit(this.submission, this.verification_code);
+        this.confirmDialog = false;
       },
       submitProposalCancel(event) {
         this.confirmDialog = false;
@@ -230,7 +196,7 @@ const app = createApp({
     template: template
   })
 
-  app.mount(configuration['mountroot'] ?? '#app')
+  app.mount(Configuration['mountroot'] ?? '#app')
 })();
 
 

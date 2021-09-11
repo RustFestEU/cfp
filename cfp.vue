@@ -40,11 +40,14 @@
       @change="localeChange"
       v-bind:data-export-format=
         "'# ' + $t('f-submission-lang-t') +'\n'
-        +'language = '+ tomlString(submission.language) +' # '+ languageName(submission.language)"
+        +'language = '+ tomlString(submission.language) +' # '+ currentLang"
     >
-      <option v-for="loc in locales" :value="loc.lang">
-        {{ loc.name }}
-      </option>
+      <option
+        v-for="loc in locales"
+        :value="loc"
+        v-html="languages[submission.language][loc]
+              + (submission.language != loc ? ' ('+languages[loc][loc]+')' :'')"
+      ></option>
     </select>
 
     <div v-html="$mt('f-submission-lang', { linkSupportedLanguages })"></div>
@@ -56,20 +59,21 @@
       type="text"
       name="submission_presentation_lang"
       v-model="submission.presentation_lang"
-      v-bind:placeholder="submission_language_name"
+      v-bind:placeholder="currentLang"
       v-bind:data-export-format=
         "'# ' + $t('f-submission-presentation-lang-t') +'\n'
         +'presentation_lang = ' + tomlString(submission.presentation_lang)"
     />
 
-    <div v-html="$mt('f-submission-presentation-lang', { submission_language_name, linkSupportedLanguages })"></div>
+    <div v-html="$mt('f-submission-presentation-lang', { currentLang, linkSupportedLanguages })"></div>
 
     <!-- Chosing a presentation format -->
 
     <h3 v-t:f-submission-presentation-format-t></h3>
     <ol v-bind:data-export-format=
       "'# '+ $t('f-submission-presentation-format-t') +'\n'
-      +'presentation_format = '+ tomlString(submission.presentation_format)"
+      +'presentation_format = '+ tomlString(submission.presentation_format)
+      +' # '+ $t('f-submission-presentation-format-'+submission.presentation_format+'-t')"
     >
       <li v-for="opt in presentation_formats">
         <label>
@@ -77,9 +81,9 @@
             type="radio"
             name="presentation_format"
             v-model="submission.presentation_format"
-            v-bind:value="opt"
+            v-bind:value="opt.label"
           />
-          {{ $mti('f-submission-presentation-format-'+opt+'-t') }}
+          {{ $mti('f-submission-presentation-format-'+opt.label+'-t') }}
         </label>
       </li>
     </ol>
@@ -98,7 +102,7 @@
       name="title"
       v-model="submission.title"
       v-bind:data-export-format=
-        "'# '+ $t('f-proposal-t') +' - '+ $t('f-proposal-title-t') +'\n'
+        "'# '+ $t('f-proposal-t') +'\n\n## '+ $t('f-proposal-title-t') +'\n'
         +'title = '+ tomlString(submission.title)"
     />
 
@@ -109,7 +113,7 @@
       name="summary"
       v-model="submission.summary"
       v-bind:data-export-format=
-        "'# '+ $t('f-proposal-t') +' - '+ $t('f-proposal-summary-t') +'\n'
+        "'## '+ $t('f-proposal-summary-t') +'\n'
         +'summary = '+ tomlText(submission.summary)"
     ></textarea>
 
@@ -122,7 +126,7 @@
       name="description"
       v-model="submission.description"
       v-bind:data-export-format=
-        "'# '+ $t('f-proposal-t') +' - '+ $t('f-proposal-description-t') +'\n'
+        "'## '+ $t('f-proposal-description-t') +'\n'
         +'description = '+ tomlText(submission.description)"
       @focus="autogrow" @input="autogrow"
     ></textarea>
@@ -136,8 +140,9 @@
     <div v-html="$mt('f-proposal-audience')"></div>
 
     <ol v-bind:data-export-format=
-      "'# '+ $t('f-proposal-t') +' - '+ $t('f-proposal-audience-t') +'\n'
-      +'audience_target = '+ tomlString(submission.audience_target)"
+      "'## '+ $t('f-proposal-audience-t') +'\n'
+      +'audience_target = '+ tomlString(submission.audience_target)
+      +' # '+ $t('f-proposal-audience-'+submission.audience_target+'-t')"
     >
       <li v-for="opt in audience_targets">
         <label>
@@ -145,9 +150,9 @@
             type="radio"
             name="audience_target"
             v-model="submission.audience_target"
-            v-bind:value="opt"
+            v-bind:value="opt.label"
           />
-          <span v-html="$mti('f-proposal-audience-'+opt+'-t')"></span>
+          <span v-html="$mti('f-proposal-audience-'+opt.label+'-t')"></span>
         </label>
       </li>
     </ol>
@@ -159,8 +164,9 @@
     <div v-html="$mt('f-proposal-highlight')"></div>
 
     <ol v-bind:data-export-format=
-      "'# '+ $t('f-proposal-t') +' - '+ $t('f-proposal-highlight-t') +'\n'
-      +'event_target = '+ tomlString(submission.event_target)"
+      "'## '+ $t('f-proposal-highlight-t') +'\n'
+      +'event_target = '+ tomlString(submission.event_target)
+      +' # '+ currentEventTarget"
     >
       <li>
         <label>
@@ -168,7 +174,7 @@
             type="radio"
             name="event_target"
             v-model="submission.event_target"
-            v-bind:value="'default'"
+            v-bind:value="''"
           />
           <strong v-html="$mti('event-none')"></strong><br />
           <em v-html="$mti('event-none-summary')"></em>
@@ -180,23 +186,23 @@
             type="radio"
             name="event_target"
             v-model="submission.event_target"
-            v-bind:value="opt"
+            v-bind:value="opt.label"
           />
-          <strong v-html="$mti('event-'+opt)"></strong><br />
-          <span v-html="$mti('event-'+opt+'-summary')"></span>
+          <strong v-html="opt.name"></strong><br />
+          <span v-html="$mti('event-'+opt.label+'-summary', { date: new Date(opt.date+'/01'), link: opt.link })"></span>
         </label>
       </li>
     </ol>
     
     <!-- Notes for the organizers about the proposal -->
 
-    <h3><label for="proposal_notes" v-t:f-proposal-notes-t></label></h3>
+    <h3><label for="notes" v-t:f-proposal-notes-t></label></h3>
     <textarea
-      name="proposal_notes"
-      v-model="submission.proposal_notes"
+      name="notes"
+      v-model="submission.notes"
       v-bind:data-export-format=
-        "'# '+ $t('f-proposal-t') +' - '+ $t('f-proposal-notes-t') +'\n'
-        +'proposal_notes = '+ tomlText(submission.proposal_notes)"
+        "'## '+ $t('f-proposal-notes-t') +'\n'
+        +'notes = '+ tomlText(submission.notes)"
       @focus="autogrow" @input="autogrow"
     ></textarea>
 
@@ -214,7 +220,7 @@
       name="name"
       v-model="submission.name"
       v-bind:data-export-format=
-        "'# '+ $t('f-submitter-t') +' - '+ $t('f-submitter-name-t') +'\n'
+        "'# '+ $t('f-submitter-t') +'\n\n## '+ $t('f-submitter-name-t') +'\n'
         +'name = '+ tomlString(submission.name)"
     />
 
@@ -226,7 +232,7 @@
       name="tagline"
       v-model="submission.tagline"
       v-bind:data-export-format=
-        "'# '+ $t('f-submitter-t') +' - '+ $t('f-submitter-tagline-t') +'\n'
+        "'## '+ $t('f-submitter-tagline-t') +'\n'
         +'tagline = '+ tomlString(submission.tagline)"
     />
 
@@ -239,7 +245,7 @@
       name="bio"
       v-model="submission.bio"
       v-bind:data-export-format=
-        "'# '+ $t('f-submitter-t') +' - '+ $t('f-submitter-bio-t') +'\n'
+        "'## '+ $t('f-submitter-bio-t') +'\n'
         +'bio = '+ tomlText(submission.bio)"
       @focus="autogrow" @input="autogrow"
     ></textarea>
@@ -263,7 +269,7 @@
       name="email"
       v-model="submission.email"
       v-bind:data-export-format=
-        "'# '+ $t('f-submitter-t') +' - '+ $t('f-contact-email-t') +'\n'
+        "'# '+ $t('f-contact-t') +' - '+ $t('f-contact-email-t') +'\n'
         +'email = '+ tomlString(submission.email)"
     />
 
@@ -282,10 +288,10 @@
       <strong>{{ submission.email }}</strong>
 
       Use the code you have received below to confirm your proposal submission:
-      <input type="text" />
+      <input type="text" v-model="verification_code" />
     </div>
     <div class="modal__action">
-      <button class="v-btn"  @click="submitProposal">Confirm</button>
+      <button class="v-btn"  @click="submitProposalSend">Confirm</button>
       <button class="v-btn"  @click="submitProposalCancel">Cancel</button>
     </div>
   </vue-final-modal>

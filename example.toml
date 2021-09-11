@@ -38,7 +38,7 @@ This is an open source toolkit we have built with my personal mantra top of mind
 audience_target = "all-audiences"
 
 ### Notes to the organizers
-proposal_notes = """
+notes = """
 
 We have used the Waasabi streaming framework to run our conference, RustFest Global in 2020 in 3 continental timezones, and make the event truly global. Back then, only a prototype, Waasabi has matured a lot in the past months and I’m happy to showcase some of its features, as well as the learnings from the experimentation which informed the current development and our future uses for our upcoming 2021 event.
 
