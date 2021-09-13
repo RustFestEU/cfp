@@ -1,29 +1,32 @@
-import Configuration from './config.js';
+import { createFluentVue } from 'fluent-vue';
+import { FluentBundle, FluentResource } from '@fluent/bundle';
 
-//TODO: import
-const { FluentBundle, FluentResource } = window.FluentBundle;
+import Configuration from '../data/config.js';
+import availableLocales from '../data/locales.json';
+
 
 
 export const bundles = {};
 export const defaultLocale = Configuration['default_locale'];
+let currentLocale;
 
 // Fetch & create all locale bundles
 for (const lang of Configuration.locales) {
   // useIsolating OFF (needed to avoid junk in interpolated URLs)
   // https://projectfluent.org/fluent.js/bundle/classes/fluentbundle.html#constructor
   const b = new FluentBundle(lang, { useIsolating: false });
-  const resource = await fetch(
-    `${Configuration.approot ?? '.'}/locales/${lang}/cfp.ftl`
-  ).then(r => r.text());
 
-  if (resource) {
+  const resources = ['cfp-form.ftl', 'events.ftl', 'languages.ftl'];
+  for (const res of resources) {
+    const resource = availableLocales[lang]?.[res];
+    if (!resource) {
+      console.log(`Locale bundle ${lang}/${res} not found or empty!`);
+    }
+  
     // Add translations to bundle
     b.addResource(new FluentResource(resource))
-
+  
     bundles[lang] = [b];
-
-  } else {
-    console.log(`Locale bundle ${lang} not loaded!`);
   }
 }
 
@@ -50,3 +53,28 @@ for (const [inlang, resourceBundles] of Object.entries(bundles)) {
     ])
   )
 }
+
+// Changes the currently used language bundle
+export function setLocale(language) {
+  if (language === currentLocale) return;
+
+  if (!language || language in bundles === false) {
+    console.error(new Error(`Requested invalid locale for setLocale: ${language ?? typeof language}`));
+    return;
+  }
+
+  currentLocale = language;
+  fluent.bundles = bundles[currentLocale];
+
+  return currentLocale;
+}
+export function getLocale() {
+  return currentLocale;
+}
+
+// Create fluent-vue instance
+export const fluent = createFluentVue({
+  bundles: bundles[defaultLocale]
+});
+setLocale(currentLocale);
+

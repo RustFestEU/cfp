@@ -1,8 +1,132 @@
-<!-- - - - - - - - - - - - - -->
-<!-- CALL FOR PROPOSALS FORM -->
-<!-- - - - - - - - - - - - - -->
+<script setup>
+import { ref, reactive, computed, watchEffect } from 'vue';
 
-<main>
+import { useFluent } from 'fluent-vue';
+const { $t } = useFluent();
+import { $mt, $mti } from '../lib/markdown.js';
+
+import { ptxString, ptxText, collect, downloadPortatext, uploadPortatext } from '../lib/portatext.js';
+
+import CfpFormSubmit from './CfpFormSubmit.vue';
+
+const props = defineProps({
+  language: String,
+  defaultLocale: String,
+  languages: Object,
+  locales: Array,
+  presentationFormats: Array,
+  audienceTargets: Array,
+  events: Array,
+  links: Object,
+});
+
+const emit = defineEmits(['update:language']);
+
+
+// Submission object with empty defaults
+const [_submission, _required] = (() => {
+  const fields = `
+    *language
+      presentation_lang
+    *presentation_format
+    *title
+    *summary
+    *description
+    *audience_target
+      event_target
+      notes
+    *name
+      tagline
+    *bio
+    *email
+  `.replace(/\s+/g,'\n').trim().split('\n');
+
+  const submission = Object.fromEntries(
+    fields.map(f => [f.replace('*',''),''])
+  );
+
+  // Default submission language
+  submission['language'] = props.language ?? 'en';
+
+  // Other submission defaults
+  submission['presentation_format'] = props.presentationFormats?.[0]?.label ?? '';
+  submission['audience_target'] = props.audienceTargets?.[0]?.label ?? '';
+
+  const required = fields.filter(r => r.includes('*')).map(r => r.slice(1));
+
+  return [ submission, required ]
+})();
+
+const submission = reactive(_submission);
+const required = _required;
+
+// Automatically update form language when submission language changes
+watchEffect(() => emit('update:language', submission.language));
+
+function uploadProposal() {
+  uploadPortatext(updateSubmission);
+}
+
+function updateSubmission(updates) {
+  // Update submission fields
+  for (let k of Object.keys(submission)) {
+    if (k in updates) submission[k] = updates[k];
+  }
+
+  // Scroll to submission
+  // TODO: REFS HOW??
+  //this.$refs.proposal.scrollIntoView();
+  document.querySelector('#proposal')?.scrollIntoView();
+}
+
+const confirmDialog = ref(false);
+
+function check() {
+  const errors = [];
+
+  for (const f of required) {
+    if (!submission[f]) errors.push(f);
+  }
+
+  if (errors.length > 0) {
+    proposalErrors = 'Please fill out all required fields: '+errors.join(',');
+    return false;
+  }
+
+  return true;
+}
+
+function submit() {
+  if (check()) confirmDialog.value=true;
+}
+
+const currentLang = computed(() => {
+  const lang = submission.language ?? props.defaultLocale;
+  return props.languages[lang][lang] ?? '';
+});
+
+const currentEventTarget = computed(() => {
+  return props.events.find(e => e.label == submission.event_target)?.name ?? $t('event-none');
+});
+
+const proposalErrors = ref('');
+</script>
+
+<script>
+export default {
+  data() {
+    const data = {
+      // All links are directly exposed to ease passing to Fluent
+      ...this.$props.links,
+    }
+
+    return data;
+  },
+}
+</script>
+
+<template>
+<section class="cfp-form">
   <h1 v-t:f-title></h1>
 
   <!-- Information about the CFP process and the unconventional handling of deadlines -->
@@ -15,32 +139,24 @@
   <!-- Upload an existing proposal and manage existing submissions -->
   <h2 v-t:f-manage-t></h2>
   <div v-html="$mt('f-manage')"></div>
-  <button @click=importProposal v-t:f-manage-upload-btn></button>
+  <button @click.prevent="uploadProposal" v-t:f-manage-upload-btn=""></button>
 
-  <div v-html="$mt('f-manage-auth')"></div>
-
-  <div>
-    <h3><label for="auth-email" v-t:f-contact-email-t></label></h3>
-
-    <input type="email" name="auth-email">
-    <button @click=importProposal v-t:f-manage-auth-btn></button>
-  </div>
+  <!-- Temporarily unavailable -->
+  <!-- <CfpLogin /> -->
 
   <!-- SUBMISSION FORM -->
   <h2 id="submission" v-t:f-submission-t></h2>
   
-  <form @submit.prevent="submitProposal">
-  
-    <!-- Language selection for the submission and the instructions -->
+  <form @submit.prevent="submit.call(this)">
 
+    <!-- Language selection for the submission and the instructions -->
     <h3><label for="submission_language" v-t:f-submission-lang-t></label></h3>
     <select
       name="submission_language"
       v-model="submission.language"
-      @change="localeChange"
-      v-bind:data-export-format=
-        "'# ' + $t('f-submission-lang-t') +'\n'
-        +'language = '+ tomlString(submission.language) +' # '+ currentLang"
+      :data-ptx="
+        '# ' + $t('f-submission-lang-t') +'\n'
+        +'language = '+ ptxString(submission.language) +' # '+ currentLang"
     >
       <option
         v-for="loc in locales"
@@ -60,9 +176,9 @@
       name="submission_presentation_lang"
       v-model="submission.presentation_lang"
       v-bind:placeholder="currentLang"
-      v-bind:data-export-format=
+      :data-ptx=
         "'# ' + $t('f-submission-presentation-lang-t') +'\n'
-        +'presentation_lang = ' + tomlString(submission.presentation_lang)"
+        +'presentation_lang = ' + ptxString(submission.presentation_lang)"
     />
 
     <div v-html="$mt('f-submission-presentation-lang', { currentLang, linkSupportedLanguages })"></div>
@@ -70,12 +186,12 @@
     <!-- Chosing a presentation format -->
 
     <h3 v-t:f-submission-presentation-format-t></h3>
-    <ol v-bind:data-export-format=
+    <ol :data-ptx=
       "'# '+ $t('f-submission-presentation-format-t') +'\n'
-      +'presentation_format = '+ tomlString(submission.presentation_format)
+      +'presentation_format = '+ ptxString(submission.presentation_format)
       +' # '+ $t('f-submission-presentation-format-'+submission.presentation_format+'-t')"
     >
-      <li v-for="opt in presentation_formats">
+      <li v-for="opt in presentationFormats">
         <label>
           <input
             type="radio"
@@ -92,7 +208,7 @@
 
 
     <!-- PROPOSAL CONTENTS -->
-    <h2 id="proposal" v-t:f-proposal-t></h2>
+    <h2 id="proposal" ref="proposal" v-t:f-proposal-t></h2>
 
     <!-- Title of the proposal -->
 
@@ -101,9 +217,10 @@
       type="text"
       name="title"
       v-model="submission.title"
-      v-bind:data-export-format=
+      required
+      :data-ptx=
         "'# '+ $t('f-proposal-t') +'\n\n## '+ $t('f-proposal-title-t') +'\n'
-        +'title = '+ tomlString(submission.title)"
+        +'title = '+ ptxString(submission.title)"
     />
 
     <!-- Proposal summary (pitch/abstract) -->
@@ -112,9 +229,11 @@
     <textarea
       name="summary"
       v-model="submission.summary"
-      v-bind:data-export-format=
+      v-autosize
+      required
+      :data-ptx=
         "'## '+ $t('f-proposal-summary-t') +'\n'
-        +'summary = '+ tomlText(submission.summary)"
+        +'summary = '+ ptxText(submission.summary)"
     ></textarea>
 
     <div v-html="$mt('f-proposal-summary')"></div>
@@ -125,9 +244,11 @@
     <textarea
       name="description"
       v-model="submission.description"
-      v-bind:data-export-format=
+      v-autosize
+      required
+      :data-ptx=
         "'## '+ $t('f-proposal-description-t') +'\n'
-        +'description = '+ tomlText(submission.description)"
+        +'description = '+ ptxText(submission.description)"
       @focus="autogrow" @input="autogrow"
     ></textarea>
 
@@ -139,12 +260,12 @@
 
     <div v-html="$mt('f-proposal-audience')"></div>
 
-    <ol v-bind:data-export-format=
+    <ol :data-ptx=
       "'## '+ $t('f-proposal-audience-t') +'\n'
-      +'audience_target = '+ tomlString(submission.audience_target)
+      +'audience_target = '+ ptxString(submission.audience_target)
       +' # '+ $t('f-proposal-audience-'+submission.audience_target+'-t')"
     >
-      <li v-for="opt in audience_targets">
+      <li v-for="opt in audienceTargets">
         <label>
           <input
             type="radio"
@@ -163,9 +284,9 @@
 
     <div v-html="$mt('f-proposal-highlight')"></div>
 
-    <ol v-bind:data-export-format=
+    <ol :data-ptx=
       "'## '+ $t('f-proposal-highlight-t') +'\n'
-      +'event_target = '+ tomlString(submission.event_target)
+      +'event_target = '+ ptxString(submission.event_target)
       +' # '+ currentEventTarget"
     >
       <li>
@@ -189,7 +310,10 @@
             v-bind:value="opt.label"
           />
           <strong v-html="opt.name"></strong><br />
-          <span v-html="$mti('event-'+opt.label+'-summary', { date: new Date(opt.date+'/01'), link: opt.link })"></span>
+          <span class="event-summary" v-html="$mti('event-'+opt.label+'-summary')"></span>
+          <br>
+          <span class="event-date" v-html="'('+ $mti('event-date',{date:new Date(opt.date+'/01')}) +')'"></span>
+          <span class="event-link" v-html="' '+ $mti('event-link',{link:opt.link}) +' '"></span>
         </label>
       </li>
     </ol>
@@ -200,10 +324,10 @@
     <textarea
       name="notes"
       v-model="submission.notes"
-      v-bind:data-export-format=
+      v-autosize
+      :data-ptx=
         "'## '+ $t('f-proposal-notes-t') +'\n'
-        +'notes = '+ tomlText(submission.notes)"
-      @focus="autogrow" @input="autogrow"
+        +'notes = '+ ptxText(submission.notes)"
     ></textarea>
 
     <div v-html="$mt('f-proposal-notes')"></div>
@@ -219,9 +343,11 @@
       type="text"
       name="name"
       v-model="submission.name"
-      v-bind:data-export-format=
+      v-autosize
+      required
+      :data-ptx=
         "'# '+ $t('f-submitter-t') +'\n\n## '+ $t('f-submitter-name-t') +'\n'
-        +'name = '+ tomlString(submission.name)"
+        +'name = '+ ptxString(submission.name)"
     />
 
     <!-- Tagline or affiliation of the submitter -->
@@ -231,9 +357,9 @@
       type="text"
       name="tagline"
       v-model="submission.tagline"
-      v-bind:data-export-format=
+      :data-ptx=
         "'## '+ $t('f-submitter-tagline-t') +'\n'
-        +'tagline = '+ tomlString(submission.tagline)"
+        +'tagline = '+ ptxString(submission.tagline)"
     />
 
     <div v-html="$mt('f-submitter-tagline')"></div>
@@ -244,19 +370,21 @@
     <textarea
       name="bio"
       v-model="submission.bio"
-      v-bind:data-export-format=
+      v-autosize
+      required
+      :data-ptx=
         "'## '+ $t('f-submitter-bio-t') +'\n'
-        +'bio = '+ tomlText(submission.bio)"
+        +'bio = '+ ptxText(submission.bio)"
       @focus="autogrow" @input="autogrow"
     ></textarea>
 
     <div v-html="$mt('f-submitter-bio')"></div>
 
 
-    <h2 v-html="$mt('f-manage-download-t')"></h2>
+    <h2 v-html="$t('f-manage-download-t')"></h2>
     <div v-html="$mt('f-manage-download')"></div>
 
-    <button @click="downloadExport" v-t:f-manage-download-btn></button>
+    <button @click.prevent="downloadPortatext(this.$el)" v-t:f-manage-download-btn></button>
 
 
     <!-- CONTACT INFORMATION -->
@@ -268,32 +396,65 @@
       type="email"
       name="email"
       v-model="submission.email"
-      v-bind:data-export-format=
+      required
+      :data-ptx=
         "'# '+ $t('f-contact-t') +' - '+ $t('f-contact-email-t') +'\n'
-        +'email = '+ tomlString(submission.email)"
+        +'email = '+ ptxString(submission.email)"
     />
 
     <div v-html="$mt('f-contact-email')"></div>
 
-    <button>Submit Proposal</button>
+    <CfpFormSubmit
+      :email="submission.email"
+      :submission="submission"
+      :submission-ptx="collect($el)"
+      v-model:confirm-dialog="confirmDialog"
+    >
+      <button v-t:f-submit-btn></button>
+      <span class="error" v-html="proposalErrors"></span>
+    </CfpFormSubmit>
   </form>
+</section>
+</template>
 
-  <vue-final-modal v-model="confirmDialog" classes="modal-container" content-class="modal-content">
-    <button class="modal__close" @click="submitProposalCancel">
-      <svg focusable="false" width="2em" height="2em" viewBox="0 0 24 24" data-v-7ca2000c=""><path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41z" fill="currentColor"></path></svg>
-    </button>
-    <span class="modal__title">Submit your proposal</span>
-    <div class="modal__content">
-      We have sent an unique numeric code to your email address:
-      <strong>{{ submission.email }}</strong>
+<style scoped>
+input[type=radio] {
+	width: 1.25rem;
+	height: 1.25rem;
+  line-height: 1.25rem;
+	display: inline-block;
+	color: black;
+	background: transparent;
+	appearance: none;
+	border: .2rem solid var(--c-teal-400);
+	border-radius: 50%;
+  margin: 0.2em .75em;
+  vertical-align:bottom;
+  margin-left: -1.85rem;
+}
 
-      Use the code you have received below to confirm your proposal submission:
-      <input type="text" v-model="verification_code" />
-    </div>
-    <div class="modal__action">
-      <button class="v-btn"  @click="submitProposalSend">Confirm</button>
-      <button class="v-btn"  @click="submitProposalCancel">Cancel</button>
-    </div>
-  </vue-final-modal>
+input[type=radio]:checked {
+  background: radial-gradient(var(--c-magenta-500) .25rem,transparent .3rem);
+}
 
-</main>
+.cfp-form ol {
+  list-style-type: none;
+  padding-left: 2.25rem;
+}
+.cfp-form li {
+  margin-bottom: .5rem;
+}
+.cfp-form h3 {
+  font-size: 1.75em;
+}
+
+.cfp-form select+div,
+.cfp-form textarea+div,
+.cfp-form input+div {
+  margin-top: 1em;
+}
+.error {
+  font-weight: bold;
+  color: red;
+}
+</style>
