@@ -1,4 +1,5 @@
 import { getLocale } from "./l10n.js";
+import Configuration from '../data/config.js';
 
 
 export async function check(submission) {
@@ -8,7 +9,7 @@ export async function check(submission) {
 }
 
 export async function verify(email) {
-  return await fetch('http://localhost:1337/email-verification/request', {
+  return await fetch(`${Configuration.backend}/email-verification/request`, {
     method: 'post',
     headers: {
       'Content-Type':'application/json',
@@ -22,7 +23,7 @@ export async function verify(email) {
 }
 
 export async function submit(submission, ptx, code) {
-  return await fetch('http://localhost:1337/cfp/submit', {
+  return await fetch(`${Configuration.backend}/cfp/submit`, {
     method: 'post',
     headers: {
       'Content-Type':'application/json',
