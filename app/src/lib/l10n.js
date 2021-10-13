@@ -7,14 +7,15 @@ import availableLocales from '../data/locales.json';
 
 
 export const bundles = {};
-export const defaultLocale = Configuration['default_locale'];
+export const defaultLocale = urlLocale() ?? Configuration['default_locale'];
 let currentLocale;
 
 // Fetch & create all locale bundles
-for (const lang of Configuration.locales) {
+for (let lang of Configuration.locales) {
   // useIsolating OFF (needed to avoid junk in interpolated URLs)
   // https://projectfluent.org/fluent.js/bundle/classes/fluentbundle.html#constructor
-  const b = new FluentBundle(lang, { useIsolating: false });
+  // Intl.DateTimeFormat chokes on zn_Hans, but accepts zn-Hans
+  const b = new FluentBundle(lang.replace('_','-'), { useIsolating: false });
 
   const resources = ['cfp-form.ftl', 'events.ftl', 'languages.ftl'];
   for (const res of resources) {
@@ -78,3 +79,12 @@ export const fluent = createFluentVue({
 });
 setLocale(currentLocale);
 
+// Allow the default locale to be controlled externally
+// Page location / hash:
+function urlLocale() {
+  const hash = window.location.hash.slice(1).replace(/-/g,'_').toLowerCase();
+
+  for (let lang of Configuration.locales) {
+    if (hash === lang.toLowerCase()) return lang;
+  }
+}
