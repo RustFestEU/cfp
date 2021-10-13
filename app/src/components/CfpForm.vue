@@ -109,7 +109,7 @@ const currentEventTarget = computed(() => {
   return props.events.find(e => e.label == submission.event_target)?.name ?? $t('event-none');
 });
 
-const proposalErrors = ref('');
+let proposalErrors = ref('');
 </script>
 
 <script>
