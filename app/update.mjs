@@ -1,7 +1,8 @@
 #!/bin/env node
 import 'dotenv/config'
 import fetch from 'node-fetch';
-import { fileURLToPath, dirname, resolve } from 'url'
+import { fileURLToPath } from 'url'
+import { dirname, resolve } from 'path'
 import { writeFile, mkdir } from 'fs/promises';
 
 const ROOTDIR = dirname(fileURLToPath(import.meta.url))
