@@ -38,6 +38,10 @@ export default async function generate(opts = {}) {
       write: false,
       assetsDir,
     },
+    // Prevent Vite from wandering outside of the module dir fro PostCSS config files
+    css: {
+      postcss: {}
+    },
     //https://github.com/vitejs/vite/issues/5335
     //plugins: [vue()],
   })
