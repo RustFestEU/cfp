@@ -1,8 +1,10 @@
 #!/bin/env node
 import 'dotenv/config'
 import fetch from 'node-fetch';
-import { fileURLToPath } from 'url'
+import { fileURLToPath, dirname, resolve } from 'url'
 import { writeFile, mkdir } from 'fs/promises';
+
+const ROOTDIR = dirname(fileURLToPath(import.meta.url))
 
 
 // Check if we are running from the commandline
@@ -17,7 +19,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 export default async function update(opts = {}) {
   const localeDataUrl = opts.localeDataUrl || 'https://raw.githubusercontent.com/RustFestEU/localization/main/';
   const localeFiles = opts.localeFiles || 'cfp-form.ftl|events.ftl';
-  const dataPath = opts.dataPath|| './src/data';
+  const dataPath = opts.dataPath|| resolve(ROOTDIR, './src/data');
 
   // Fetch the CFP configuration from the CMS
   const configRes = await fetch(
