@@ -1,0 +1,9 @@
+{
+  "configurationUrl": "file:///home/flaki/work/rustfest/cfp/create-cfp-app/example-config.json",
+  "localeDataUrl": "https://raw.githubusercontent.com/RustFestEU/localization/main",
+  "localeFiles": "cfp-form.ftl|events.ftl",
+  "deployDir": "./docs",
+  "assetsDir": "assets",
+  "writeIndex": "index.html",
+  "writeHeaders": ""
+}
