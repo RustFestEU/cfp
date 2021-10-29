@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { writeFileSync, mkdir } = require('fs')
+const { writeFile, mkdir } = require('fs/promises')
 const { resolve } = require('path')
 const { pathToFileURL } = require('url')
 const { prompt } = require('enquirer')
@@ -65,7 +65,9 @@ console.clear();
   if (options.configurationUrl === 'example-config.json') options.configurationUrl = exampleConfig
 
   const settings = resolve(options.deployDir, '.settings.json')
-  writeFileSync(settings, JSON.stringify(options, null, 2))
+
+  await mkdir(options.deployDir, { recursive: true })
+  await writeFile(settings, JSON.stringify(options, null, 2))
   console.log('Settings saved in: '+settings)
 
   await cfpApp.default(options)
