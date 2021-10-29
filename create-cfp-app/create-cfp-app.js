@@ -51,7 +51,8 @@ const customization = [
   }
 ]
 
-if (!process.argv[1].endsWith('/create-cfp-app.js')) {
+if (process.env.DEBUG) console.log(process.argv)
+if (!process.argv[1].includes('/create-cfp-app')) {
   console.error('Please run standalone (e.g.: yarn create cfp-app)')
   process.exit(1)
 }
