@@ -45,7 +45,7 @@ export default async function update(opts = {}) {
       config = await fetch(location).then(r => r.json())
 
     } else if (url?.username) {
-      cmsHost = url.host
+      cmsHost = url.origin
       cmsUsername = url.username
       cmsPassword = url.password
     }
