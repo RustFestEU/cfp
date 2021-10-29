@@ -3,9 +3,11 @@ import 'dotenv/config'
 import fetch from 'node-fetch';
 import { fileURLToPath } from 'url'
 import { dirname, resolve } from 'path'
-import { writeFile, mkdir } from 'fs/promises';
+import { writeFile, mkdir, readFile } from 'fs/promises';
 
 const ROOTDIR = dirname(fileURLToPath(import.meta.url))
+
+let cmsHost, cmsUsername, cmsPassword;
 
 
 // Check if we are running from the commandline
@@ -22,21 +24,60 @@ export default async function update(opts = {}) {
   const localeFiles = opts.localeFiles || 'cfp-form.ftl|events.ftl';
   const dataPath = opts.dataPath|| resolve(ROOTDIR, './src/data');
 
-  // Fetch the CFP configuration from the CMS
-  const configRes = await fetch(
-    `${process.env.CMS_HOST}/cfp/configuration`,
-    {
-      headers: {
-        'Authorization': `Bearer ${await auth()}`,
-        'Cache-Control': 'no-store'
-      }
+  let config;
+
+  if (opts.configurationUrl) {
+    const location = String(opts.configurationUrl)
+    let url
+    try {
+      url = new URL(opts.configurationUrl)
+    } catch(e) { /* not an URL */ }
+
+
+    // Local file path
+    if (location.startsWith('file:///')) {
+      console.log('Loading config from file: ', location)
+      config = JSON.parse(await readFile(opts.configurationUrl))
+
+    // Remote JSON file
+    } else if (location.endsWith('.json')) {
+      console.log('Fetching config from: ', location)
+      config = await fetch(location).then(r => r.json())
+
+    } else if (url?.username) {
+      cmsHost = url.host
+      cmsUsername = cms.username
+      cmsPassword = cms.password
     }
-  );
 
-  console.log(`Fetching CFP configuration...`)
-  if (process.env.DEBUG) console.log(`Reponse: HTTP/`+configRes.status)
+  } else if (process.env.CMS_HOST) {
+    cmsHost = process.env.CMS_HOST
+    cmsUsername = process.env.CMS_USERNAME
+    cmsPassword = process.env.CMS_PASSWORD
+  }
 
-  const config = await configRes.json();
+  // Fetch the CFP configuration from the CMS
+  if (!config) {
+    const configRes = await fetch(
+      `${cmsHost}/cfp/configuration`,
+      {
+        headers: {
+          'Authorization': `Bearer ${await auth()}`,
+          'Cache-Control': 'no-store'
+        }
+      }
+    );
+
+    console.log(`Fetching CFP configuration...`)
+    if (process.env.DEBUG) console.log(`Reponse: HTTP/`+configRes.status)
+
+    config = await configRes.json();
+  }
+
+  if (!config) {
+    console.error('Was unable to retrieve the cfp-app configuration!')
+    process.exit(1)
+  }
 
   const languages =   [];
   const languagePo =  [];
@@ -121,12 +162,12 @@ async function auth() {
     console.log('Authenticating...');
 
     JWT_AUTH = await fetch(
-      `${process.env.CMS_HOST}/auth/local`,
+      `${cmsHost}/auth/local`,
       {
         method: 'post',
         body: JSON.stringify({
-          identifier: process.env.CMS_USERNAME || 'sitebuild',
-          password: process.env.CMS_PASSWORD
+          identifier: cmsUsername || 'sitebuild',
+          password: cmsPassword
         }),
         headers: {
           'Content-Type': 'application/json'
