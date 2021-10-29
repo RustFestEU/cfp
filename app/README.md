@@ -1,7 +1,7 @@
-# Vue 3 + Vite
+# CFP App frontend from the RustFest team
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This is a Call for Proposals submission form built by the [team behind the RustFest Global conference](https://rustfest.world/news/say-hello-rustfest-global-2021#compile-once-run-anywhere). The form can be used to implement a more inclusive, less stressful process for community conferences who would like to make their event accessible to a wider range of submitters from around the world.
 
-## Recommended IDE Setup
+The app is fully customizable and open source, and comes with a matching backend and administration/CFP selection interface (work-in-progress).
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+You may use [`create-cfp-app`](https://www.npmjs.com/package/create-cfp-app) to quickly spin up a new instance for testing or deployment.
