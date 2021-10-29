@@ -1,0 +1,33 @@
+{
+  "name": "create-cfp-app",
+  "version": "1.1.1",
+  "description": "Create a new cfp-app instance",
+  "main": "create-cfp-app.js",
+  "bin": "create-cfp-app.js",
+  "scripts": {
+    "test": "true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rustfesteu/cfp.git"
+  },
+  "keywords": [
+    "cfp",
+    "app",
+    "call",
+    "for",
+    "proposals",
+    "cfp",
+    "form"
+  ],
+  "author": "Flaki <git@flaki.hu>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rustfesteu/cfp/issues"
+  },
+  "homepage": "https://github.com/rustfesteu/cfp#readme",
+  "dependencies": {
+    "cfp-app": "^1.1.1",
+    "enquirer": "^2.3.6"
+  }
+}

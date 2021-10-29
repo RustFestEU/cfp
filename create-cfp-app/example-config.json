@@ -1,0 +1,63 @@
+{
+  "locales": [
+    "en|en-001",
+    "es"
+  ],
+  "default_locale": "en",
+  "approot": ".",
+  "mountroot": "#cfp-app",
+  "backend": "https://backend.example.com",
+  "events": [
+    {
+      "label": "awesome-conf",
+      "name": "Awesome Conference 1999",
+      "date": "1999/08",
+      "link": "https://example.com/awesome-conference"
+    }
+  ],
+  "links": [
+    {
+      "label": "cfp_guidelines",
+      "url": "https://example.com/cfp-guidelines"
+    }
+  ],
+  "presentation_formats": [
+    {
+      "id": 1,
+      "label": "standard",
+      "decription": "25-minute talks (incl. Q&A)"
+    },
+    {
+      "id": 2,
+      "label": "workshop",
+      "decription": "2-hour workshops"
+    }
+  ],
+  "audience_targets": [
+    {
+      "id": 1,
+      "label": "all-audiences",
+      "decription": "Everyone, without exception."
+    },
+    {
+      "id": 2,
+      "label": "hacker-ninjas",
+      "decription": "Only true hacker-ninjas, not ever rockstars will have a clue!"
+    }
+  ],
+  "fields": [
+    "*language",
+    "presentation_lang",
+    "*presentation_format",
+    "*title",
+    "*summary",
+    "*description",
+    "*audience_target",
+    "event_target",
+    "notes",
+    "*name",
+    "tagline",
+    "*bio",
+    "*email"
+  ]
+}
