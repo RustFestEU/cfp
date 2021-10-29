@@ -46,8 +46,8 @@ export default async function update(opts = {}) {
 
     } else if (url?.username) {
       cmsHost = url.host
-      cmsUsername = cms.username
-      cmsPassword = cms.password
+      cmsUsername = url.username
+      cmsPassword = url.password
     }
 
   } else if (process.env.CMS_HOST) {
@@ -58,14 +58,17 @@ export default async function update(opts = {}) {
 
   // Fetch the CFP configuration from the CMS
   if (!config) {
+    const headers = {
+      'Cache-Control': 'no-store'
+    }
+
+    if (cmsUsername && cmsPassword) {
+      const authkey = await auth()
+      headers['Authorization'] = `Bearer ${authkey}`
+    }
+
     const configRes = await fetch(
-      `${cmsHost}/cfp/configuration`,
-      {
-        headers: {
-          'Authorization': `Bearer ${await auth()}`,
-          'Cache-Control': 'no-store'
-        }
-      }
+      `${cmsHost}/cfp/configuration`, { headers }
     );
 
     console.log(`Fetching CFP configuration...`)
@@ -166,7 +169,7 @@ async function auth() {
       {
         method: 'post',
         body: JSON.stringify({
-          identifier: cmsUsername || 'sitebuild',
+          identifier: cmsUsername,
           password: cmsPassword
         }),
         headers: {
