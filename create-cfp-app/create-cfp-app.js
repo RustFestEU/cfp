@@ -29,19 +29,19 @@ const customization = [
     type: 'input',
     name: 'deployDir',
     message: 'Deploy dir?',
-    initial: resolve(process.cwd(), 'demo')
+    initial: process.cwd()
   },
   {
     type: 'input',
     name: 'assetsDir',
     message: 'Path of the CFP App assets? (JS,CSS)',
-    initial: 'assets'
+    initial: 'demo/assets'
   },
   {
     type: 'input',
     name: 'writeIndex',
     message: 'Create the HTML output? (default: yes)',
-    initial: 'index.html'
+    initial: 'demo/index.html'
   },
   {
     type: 'input',
