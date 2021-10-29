@@ -1,5 +1,5 @@
 #!/bin/env node
-const { writeFileSync } = require('fs')
+const { writeFileSync, mkdir } = require('fs')
 const { resolve } = require('path')
 const { pathToFileURL } = require('url')
 const { prompt } = require('enquirer')
@@ -29,7 +29,7 @@ const customization = [
     type: 'input',
     name: 'deployDir',
     message: 'Deploy dir?',
-    initial: __dirname+'/demo'
+    initial: resolve(process.cwd(), 'demo')
   },
   {
     type: 'input',
@@ -57,14 +57,15 @@ if (!process.argv[1].includes('/create-cfp-app')) {
   process.exit(1)
 }
 
+console.clear();
 (async () => {
   const cfpApp = await import('cfp-app')
 
   const options = await prompt(customization)
   if (options.configurationUrl === 'example-config.json') options.configurationUrl = exampleConfig
 
-  const settings = options.deployDir+'/.settings.json'
-  writeFileSync(settings, JSON.stringify(options))
+  const settings = resolve(options.deployDir, '.settings.json')
+  writeFileSync(settings, JSON.stringify(options, null, 2))
   console.log('Settings saved in: '+settings)
 
   await cfpApp.default(options)
