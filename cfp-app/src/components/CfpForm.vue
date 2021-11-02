@@ -245,6 +245,11 @@ export default {
         "'## '+ $t('f-proposal-summary-t') +'\n'
         +'summary = '+ ptxText(submission.summary)"
     ></textarea>
+    <p
+      class="errmsg"
+      v-show="submission.summary.length > 240"
+      v-html="$t('errmsg-shorter', { fieldname: $t('f-proposal-summary-t') })"
+    ></p>
 
     <div v-html="$mt('f-proposal-summary')"></div>
 
@@ -458,10 +463,18 @@ input[type=radio]:checked {
   font-size: 1.75em;
 }
 
+.cfp-form select+.errmsg+div,
+.cfp-form textarea+.errmsg+div,
+.cfp-form input+.errmsg+div,
 .cfp-form select+div,
 .cfp-form textarea+div,
 .cfp-form input+div {
   margin-top: 1em;
+}
+.errmsg {
+  color: red;
+  margin-top: .25em;
+  margin-bottom: 1em
 }
 .error {
   font-weight: bold;
