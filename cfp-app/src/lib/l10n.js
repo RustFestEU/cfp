@@ -4,7 +4,10 @@ import { FluentBundle, FluentResource } from '@fluent/bundle';
 import Configuration from '../data/config.js';
 import availableLocales from '../data/locales.json';
 
-
+const dates = `
+date-approx = { DATETIME($date, year: \"numeric\", month: \"long\") }
+date-precise = { DATETIME($date, year: \"numeric\", month: \"long\", day: \"numeric\") }
+`;
 
 export const bundles = {};
 export const defaultLocale = urlLocale() ?? Configuration['default_locale'];
@@ -17,6 +20,9 @@ for (let lang of Configuration.locales) {
   // Intl.DateTimeFormat chokes on zn_Hans, but accepts zn-Hans
   const b = new FluentBundle(lang.replace('_','-'), { useIsolating: false });
 
+  // Built-in date resource
+  b.addResource(new FluentResource(dates))
+  
   const resources = ['cfp-form.ftl', 'events.ftl', 'languages.ftl'];
   for (const res of resources) {
     const resource = availableLocales[lang]?.[res];

@@ -79,6 +79,16 @@ function updateSubmission(updates) {
   document.querySelector('#proposal')?.scrollIntoView();
 }
 
+function formatDate(date) {
+  '('+ +')'
+  if (date.length < 10) {
+    return $mti('date-approx',{date:new Date(date.replace(/^(\d+\/\d+)$/,'$1/01'))})
+  } else {
+    return $mti('date-precise',{date:new Date(date.replace(/^(\d+\/\d+)$/,'$1/01'))})
+  }
+
+}
+
 const confirmDialog = ref(false);
 
 function check() {
@@ -312,8 +322,8 @@ export default {
           <strong v-html="opt.name"></strong><br />
           <span class="event-summary" v-html="$mti('event-'+opt.label+'-summary')"></span>
           <br>
-          <span class="event-date" v-html="'('+ $mti('event-date',{date:new Date(opt.date+'/01')}) +')'"></span>
-          <span class="event-link" v-html="' '+ $mti('event-link',{link:opt.link}) +' '"></span>
+          <span class="event-date" v-html="formatDate(opt.date)"></span>
+          <span class="event-link">&nbsp;<a :href="opt.link" target="_blank">ℹ️</a></span>
         </label>
       </li>
     </ol>
